@@ -6,23 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>深入理解计算机系统 | Hexo</title>
+  <title>lab3 Attack lab | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹">
+  <meta name="description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主">
+<meta name="keywords" content="cs:app">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解计算机系统">
+<meta property="og:title" content="lab3 Attack lab">
 <meta property="og:url" content="http://yoursite.com/2019/03/16/lab3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹">
+<meta property="og:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://tu.027cgb.com/618037/mov.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/BC.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/D.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/lab3result4.png">
-<meta property="og:updated_time" content="2019-03-16T08:10:19.381Z">
+<meta property="og:updated_time" content="2019-03-16T08:29:30.721Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入理解计算机系统">
-<meta name="twitter:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹">
+<meta name="twitter:title" content="lab3 Attack lab">
+<meta name="twitter:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主">
 <meta name="twitter:image" content="http://tu.027cgb.com/618037/mov.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -170,21 +171,20 @@
         
   
     <h1 class="article-title" itemprop="name">
-      深入理解计算机系统
+      lab3 Attack lab
     </h1>
   
 
         
         <a href="/2019/03/16/lab3/" class="archive-article-date">
-  	<time datetime="2019-03-16T08:08:25.439Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
+  	<time datetime="2019-03-16T08:28:20.680Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="lab3-Attack-lab"><a href="#lab3-Attack-lab" class="headerlink" title="lab3 Attack lab"></a>lab3 Attack lab</h1><hr>
-<p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
+        <p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
 <blockquote>
 <ul>
 <li>缓冲区溢出攻击：1-3小题</li>
@@ -296,6 +296,17 @@ ec 17 40 00 00 00 00 00
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
