@@ -8,22 +8,22 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>lab3 Attack lab | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主">
+  <meta name="description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta name="keywords" content="cs:app">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lab3 Attack lab">
 <meta property="og:url" content="http://yoursite.com/2019/03/16/lab3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主">
+<meta property="og:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://tu.027cgb.com/618037/mov.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/BC.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/D.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/lab3result4.png">
-<meta property="og:updated_time" content="2019-03-16T08:29:30.721Z">
+<meta property="og:updated_time" content="2019-03-16T16:10:45.757Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lab3 Attack lab">
-<meta name="twitter:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主">
+<meta name="twitter:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta name="twitter:image" content="http://tu.027cgb.com/618037/mov.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -188,23 +188,21 @@
 <blockquote>
 <ul>
 <li>缓冲区溢出攻击：1-3小题</li>
-<li>ROP 攻击：4，5小题</li>
+<li>ROP 攻击：4，5小题<a id="more"></a>
+</li>
 </ul>
 </blockquote>
-<p>##缓冲区溢出攻击<br>首先，先讲讲缓冲区溢出攻击的原理</p>
+<h2 id="缓冲区溢出攻击"><a href="#缓冲区溢出攻击" class="headerlink" title="缓冲区溢出攻击"></a>缓冲区溢出攻击</h2><p>首先，先讲讲缓冲区溢出攻击的原理</p>
 <p>众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。<br>当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主程序中。</p>
 <p>缓冲区溢出攻击便是应用了函数调用这个特点，将PC的返回位置做出更改，从而将程序跳转到我们的攻击程序中。</p>
 <hr>
-<p>###Part1</p>
-<p>###Part2</p>
-<p>###Part3</p>
-<hr>
-<p>##ROP攻击<br>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
+<h3 id="Part1"><a href="#Part1" class="headerlink" title="Part1"></a>Part1</h3><h3 id="Part2"><a href="#Part2" class="headerlink" title="Part2"></a>Part2</h3><h3 id="Part3"><a href="#Part3" class="headerlink" title="Part3"></a>Part3</h3><hr>
+<h2 id="ROP攻击"><a href="#ROP攻击" class="headerlink" title="ROP攻击"></a>ROP攻击</h2><p>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
 <p>面对这种情况rtarget做出的对堆栈的保护机制：<br>1.每次为程序分配堆栈段的地址是任意的，无法提前检查出。<br>2.PC无法执行堆栈段中的程序，如果运行便会报错，并终止程序的运行。</p>
 <p>面对这种情况，我们对程序代码进行重构，引导PC在已有程序中跳转，以将PC引导到我们的目标攻击文件中去。</p>
 <p>我们应注意二进制文件中，是否含有对我们有利的或有帮助的信息，并注意记录下来他们的地址，关注如下的命令是否存在：</p>
 <p><img src="http://tu.027cgb.com/618037/mov.png" alt="mov"><br><img src="http://tu.027cgb.com/618037/BC.png" alt="BC"><br><img src="http://tu.027cgb.com/618037/D.png" alt="D"><br>还有90——为空指令<br>c3——返回指令</p>
-<p>###Part4<br>这道题目要求我们将rtarget引导入touch2(cookie)函数，主函数所调用的函数如下：</p>
+<h3 id="Part4"><a href="#Part4" class="headerlink" title="Part4"></a>Part4</h3><p>这道题目要求我们将rtarget引导入touch2(cookie)函数，主函数所调用的函数如下：</p>
 <pre><code>0000000000401994 &lt;start_farm&gt;:
   401994:    b8 01 00 00 00           mov    $0x1,%eax
   401999:    c3                       retq   
@@ -266,8 +264,7 @@ fa 97 b9 59 00 00 00 00
 a2 19 40 00 00 00 00 00
 ec 17 40 00 00 00 00 00
 </code></pre><p>执行后的结果：<br><img src="http://tu.027cgb.com/618037/lab3result4.png" alt="result"></p>
-<p>###Part5</p>
-
+<h3 id="Part5"><a href="#Part5" class="headerlink" title="Part5"></a>Part5</h3>
       
 
       
