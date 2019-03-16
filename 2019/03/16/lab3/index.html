@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="北雷的村民">
-<meta property="og:type" content="website">
+  <meta name="description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/03/16/lab3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="北雷的村民">
+<meta property="og:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-16T04:33:01.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="北雷的村民">
+<meta name="twitter:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题   ##缓冲区溢出攻击首先，先讲讲缓冲区溢出攻击的原理 众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -157,70 +158,157 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-lab3" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="lab3-Attack-lab"><a href="#lab3-Attack-lab" class="headerlink" title="lab3 Attack lab"></a>lab3 Attack lab</h1><hr>
+<p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
+<blockquote>
+<ul>
+<li>缓冲区溢出攻击：1-3小题</li>
+<li>ROP 攻击：4，5小题</li>
+</ul>
+</blockquote>
+<p>##缓冲区溢出攻击<br>首先，先讲讲缓冲区溢出攻击的原理</p>
+<p>众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。<br>当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主程序中。</p>
+<p>缓冲区溢出攻击便是应用了函数调用这个特点，将PC的返回位置做出更改，从而将程序跳转到我们的攻击程序中。</p>
+<hr>
+<p>###Part1</p>
+<p>###Part2</p>
+<h2 id="Part3"><a href="#Part3" class="headerlink" title="###Part3"></a>###Part3</h2><p>##ROP攻击<br>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
+<p>面对这种情况rtarget做出的对堆栈的保护机制：<br>1.每次为程序分配堆栈段的地址是任意的，无法提前检查出。<br>2.PC无法执行堆栈段中的程序，如果运行便会报错，并终止程序的运行。</p>
+<p>面对这种情况，我们对程序代码进行重构，引导PC在已有程序中跳转，以将PC引导到我们的目标攻击文件中去。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/16/lab3/" class="archive-article-date">
-  	<time datetime="2019-03-16T04:25:45.730Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/16/lab3/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/16/csapp/" class="archive-article-date">
-  	<time datetime="2019-03-15T16:55:29.224Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/16/csapp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深入理解计算机系统</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/16/csapp/">深入理解计算机系统</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -243,8 +331,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

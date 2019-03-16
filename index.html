@@ -46,7 +46,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/img/head.png" class="js-avatar">
+			<img src="https://b-ssl.duitang.com/uploads/item/201707/11/20170711133936_mjQa3.jpeg" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">Adamlixi</a></h1>
@@ -106,7 +106,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="img/head.png" class="js-avatar">
+				<img src="https://b-ssl.duitang.com/uploads/item/201707/11/20170711133936_mjQa3.jpeg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">Adamlixi</h1>
@@ -158,6 +158,70 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-lab3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="lab3-Attack-lab"><a href="#lab3-Attack-lab" class="headerlink" title="lab3 Attack lab"></a>lab3 Attack lab</h1><hr>
+<p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
+<blockquote>
+<ul>
+<li>缓冲区溢出攻击：1-3小题</li>
+<li>ROP 攻击：4，5小题</li>
+</ul>
+</blockquote>
+<p>##缓冲区溢出攻击<br>首先，先讲讲缓冲区溢出攻击的原理</p>
+<p>众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。<br>当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主程序中。</p>
+<p>缓冲区溢出攻击便是应用了函数调用这个特点，将PC的返回位置做出更改，从而将程序跳转到我们的攻击程序中。</p>
+<hr>
+<p>###Part1</p>
+<p>###Part2</p>
+<h2 id="Part3"><a href="#Part3" class="headerlink" title="###Part3"></a>###Part3</h2><p>##ROP攻击<br>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
+<p>面对这种情况rtarget做出的对堆栈的保护机制：<br>1.每次为程序分配堆栈段的地址是任意的，无法提前检查出。<br>2.PC无法执行堆栈段中的程序，如果运行便会报错，并终止程序的运行。</p>
+<p>面对这种情况，我们对程序代码进行重构，引导PC在已有程序中跳转，以将PC引导到我们的目标攻击文件中去。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/16/lab3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-csapp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
