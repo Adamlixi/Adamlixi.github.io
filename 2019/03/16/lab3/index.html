@@ -21,7 +21,11 @@
 <meta property="og:image" content="http://tu.027cgb.com/618037/BC.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/D.png">
 <meta property="og:image" content="http://tu.027cgb.com/618037/lab3result4.png">
-<meta property="og:updated_time" content="2019-03-17T13:04:30.332Z">
+<meta property="og:image" content="http://tu.027cgb.com/618037/final1.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/final.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/final2.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/finallab.png">
+<meta property="og:updated_time" content="2019-03-18T09:14:15.161Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解计算机系统">
 <meta name="twitter:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
@@ -339,7 +343,19 @@ fa 97 b9 59 00 00 00 00
 a2 19 40 00 00 00 00 00
 ec 17 40 00 00 00 00 00
 </code></pre><p>执行后的结果：<br><img src="http://tu.027cgb.com/618037/lab3result4.png" alt="result"></p>
-<h3 id="Part5"><a href="#Part5" class="headerlink" title="Part5"></a>Part5</h3>
+<h3 id="Part5"><a href="#Part5" class="headerlink" title="Part5"></a>Part5</h3><p>到了最后一道题目，这道题目要求和第三题一样————向touch3()传入一个cookie地址，且该地址的cookie为asc码表示。</p>
+<p>所以解决这道题目的思路和之前的也一样，首先需要确定堆栈的栈顶地址，然后通过cookie与其栈顶的相对距离确定cookie的地址。</p>
+<p>所以这一次我们应该在整个rtarget文件中寻找我们所需要的指令。</p>
+<p>由于指令非常多，所以在查找指令时需要灵活，首先我们需要有一条主方向，然后根据给出的指令灵活变换我们的破防思路，但一定要靠近我们制定的方向。</p>
+<p>1.首先我们需要将%rsp的值保存起来，这样便确定了栈顶的位置。<br>2.通过popq将我们事先存储在栈中的相对位移值弹出。<br>3.根据栈顶和位移确定cookie的地址，将其传入touch3。</p>
+<p>以上便为主要方向。下面来进行解题。</p>
+<p>在面对各种复杂的二进制指令时，我们需要注意我们需要的指令代码在哪里，并把他记录下来。根据相关性简单拼凑在一起，我主要搜索mov，popq指令，以及lea，并简单拼凑，结果如下：<br><img src="http://tu.027cgb.com/618037/final1.png" alt="firstresult"></p>
+<p>接下来对提出的代码进行整理，理出我们的主要路线：<br><img src="http://tu.027cgb.com/618037/final.png" alt="second"><br>我的思路是：<br>1.将rsp的值传入rax。<br>2.将rax的值传入rdi。<br>3.弹出我们的cookie地址，将其存入rsi，注意：0这里有一条多余的pop指令才会到ret指令，所以我们需要在下一条目标指令之前输入一个没有用的数字，以保护下一个地址。<br>4.将相对位移与栈顶地址相加得到cookie地址。<br>5.将cookie地址传入rdi中。<br>6.调用touch3函数。</p>
+<p>所以得到的二进制代码如下：</p>
+<p><img src="http://tu.027cgb.com/618037/final2.png" alt="final"></p>
+<p>通过编译为二进制文件后传入rtarget，完成！</p>
+<p><img src="http://tu.027cgb.com/618037/finallab.png" alt="final"></p>
+
       
 
       
