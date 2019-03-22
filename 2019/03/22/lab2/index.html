@@ -6,20 +6,37 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>并发编程之美:基础部分 | Hexo</title>
+  <title>深入理解计算机系统：lab2 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Java 并发编程之美：基础部分 开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
-<meta name="keywords" content="Java并发编程">
+  <meta name="description" content="深入理解计算机系统：lab2 这个实验是有关于反向工程的小实验，可以从中学习到一些有关于破解的基础知识，以及对gdb的基本操作。">
+<meta name="keywords" content="cs:app">
 <meta property="og:type" content="article">
-<meta property="og:title" content="并发编程之美:基础部分">
-<meta property="og:url" content="http://yoursite.com/2019/03/20/并发编程之美/index.html">
+<meta property="og:title" content="深入理解计算机系统：lab2">
+<meta property="og:url" content="http://yoursite.com/2019/03/22/lab2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Java 并发编程之美：基础部分 开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta property="og:description" content="深入理解计算机系统：lab2 这个实验是有关于反向工程的小实验，可以从中学习到一些有关于破解的基础知识，以及对gdb的基本操作。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-20T06:02:26.372Z">
+<meta property="og:image" content="http://tu.027cgb.com/618037/1.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/2.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/3.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/4.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/5.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/6.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/7.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/8.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/9.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/10.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/11.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/12.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/2019-03-22%2011-50-54%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/2019-03-22%2011-51-13%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/2019-03-22%2011-25-29%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="http://tu.027cgb.com/618037/2019-03-22%2011-25-54%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:updated_time" content="2019-03-22T06:21:18.102Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="并发编程之美:基础部分">
-<meta name="twitter:description" content="Java 并发编程之美：基础部分 开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta name="twitter:title" content="深入理解计算机系统：lab2">
+<meta name="twitter:description" content="深入理解计算机系统：lab2 这个实验是有关于反向工程的小实验，可以从中学习到一些有关于破解的基础知识，以及对gdb的基本操作。">
+<meta name="twitter:image" content="http://tu.027cgb.com/618037/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -159,301 +176,292 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-并发编程之美" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-lab2" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      并发编程之美:基础部分
+      深入理解计算机系统：lab2
     </h1>
   
 
         
-        <a href="/2019/03/20/并发编程之美/" class="archive-article-date">
-  	<time datetime="2019-03-20T05:50:42.431Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
+        <a href="/2019/03/22/lab2/" class="archive-article-date">
+  	<time datetime="2019-03-22T06:07:46.687Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h1 id="Java-并发编程之美：基础部分"><a href="#Java-并发编程之美：基础部分" class="headerlink" title="Java 并发编程之美：基础部分"></a>Java 并发编程之美：基础部分</h1><hr>
-<p>开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。<br><a id="more"></a></p>
-<h2 id="如何创建多线程"><a href="#如何创建多线程" class="headerlink" title="如何创建多线程"></a>如何创建多线程</h2><p>Java多线程有三种方式创建————一个继承，三个实现。<br>1.新建的类继承Thread。在主函数中直接调用start运行<br>2.新建的类实现Runnable。在主函数中创建Thread将该类传入，作为线程运行的方法。<br>3.新建的类实现Callable。在主函数中创建FutureTask将该类传入，作为线程运行的方法。<br>具体创建方法如下：</p>
-<pre><code>public class createandrunning {
-    public static void main(String args[])
-    {
-        Thread method1 = new Method1() ;
-        method1.run();
-
-
-        Runnable method2 = new Method2() ;
-        new Thread(method2).start();
-
-
-        FutureTask&lt;String&gt; method3 = new FutureTask&lt;&gt;(new Method3()) ;
-        new Thread(method3).start();
-        try
-        {
-            String s = method3.get() ;
-            System.out.println(s);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    public static class Method1 extends Thread
-    {
-        public void run()
-        {
-            System.out.println(&quot;method1 was success!&quot;);
-        }
-    }
-    public static class Method2 implements Runnable
-    {
-        public void run()
-        {
-            System.out.println(&quot;method2 was success!&quot;) ;
-        }
-    }
-    public static class Method3 implements Callable&lt;String&gt;
-    {
-        public String call()
-        {
-            return &quot;method3 was success!&quot; ;
-        }
-    }
-}
-</code></pre><h2 id="同步与死锁"><a href="#同步与死锁" class="headerlink" title="同步与死锁"></a>同步与死锁</h2><p>同步：在多线程对共享资源进行操作时，很有可能对共享资源操作到一半，被另外一个线程抢占过去，从而导致错误的发生，所以在使用共享资源时往往需要同步，使得共享资源只可以被一个线程占有，操作，直到该线程操作结束释放资源才可以被其他线程竞争。<br>一般使用synchronized 来同步：</p>
-<pre><code>synchronized(共享变量)
-{
-    //操作
-}
-</code></pre><p>死锁：当多个进程互相抢占多个资源而造成的互相等待的结果。<br>死锁发生的条件如下：<br>1.互斥条件：资源同时只由一个线程占用。<br>2.请求并持有条件：一个线程已经持有一个条件，又在申请另一个条件。<br>3.不可剥夺条件：线程获取到的资源不能被其他线程抢占。<br>4.环路条件：存在一个线程——资源链。{T1,T2,…Tn} T1等待T2占用的资源，T2等待T3占用的资源…Tn等待T1占用的资源。</p>
-<h2 id="线程的等待与通知"><a href="#线程的等待与通知" class="headerlink" title="线程的等待与通知"></a>线程的等待与通知</h2><p>线程的等待有三种：</p>
-<blockquote>
-<ul>
-<li>wait()</li>
-<li>sleep()</li>
-<li>join()</li>
-</ul>
-</blockquote>
-<p>这三个函数都有“等待”的意思。</p>
-<p>wait() 函数调用时，调用该函数被挂起，同时释放资源，注意，如果该线程持有多个资源，只释放当前的资源，其他的资源不会被释放。注意在调用资源的wait()方法时，该线程n必须要持有该资源。<br>例如：</p>
-<pre><code>synchronized(A)
-{
-        //操作
-        synchronized(B)
-        {
-            B.wait() ;
-        }
-}
-</code></pre><p>此时释放B资源，A资源不会释放。</p>
-<p>sleep(int time) 函数调用时，对应的线程暂停time ms，但是并不会释放资源。</p>
-<p>join()函数多用在主函数中来等待其对应的线程结束，才会继续进行之后的程序。</p>
-<pre><code>public static void main(String args[])
-{
-    ......
-    threadA.start();
-    threadB.start();
-    threadA.join();
-    threadB.join();
-}
-</code></pre><p>主函数必须等待threadA和threadB线程运行结束后才会继续进行。</p>
-<p>关于线程的通知：</p>
-<blockquote>
-<ul>
-<li>notify()</li>
-<li>notifyAll()</li>
-</ul>
-</blockquote>
-<p>notify()<br>随机唤醒该资源对应的被挂起的线程。</p>
-<p>notifyAll()<br>唤醒该资源对应的所有被挂起的线程。</p>
-<h2 id="线程中断"><a href="#线程中断" class="headerlink" title="线程中断"></a>线程中断</h2><blockquote>
-<ul>
-<li>void interrupt() </li>
-<li>boolean isInterrupted() </li>
-<li>boolean interrupted() </li>
-</ul>
-</blockquote>
-<p>void interrupt()<br>中断线程，当A运行时，线程B调用A的interrupt方法，将A的中断标志置为true。<br>boolean isInterrupted()<br>测试该线程中断标志。并返回中断标志的状态。<br>boolean interrupted()<br>测试该线程中断标志。并返回中断标志的状态。如果发现线程被中断，则会清除中断状态。<br>注意：如果当一个线程处于sleep状态时，调用interrupted将其中断，<br>会出现InterruptedException异常。</p>
-<h2 id="守护线程与用户线程"><a href="#守护线程与用户线程" class="headerlink" title="守护线程与用户线程"></a>守护线程与用户线程</h2><p>父进程结束，子进程会结束吗？<br>答：不会。<br>父进程和子进程是独立的两个进程，一个进程的结束不会影响到另一个进程。</p>
-<p>用户进程结束，守护进程会结束吗？<br>答：会。<br>当JVM中没有用户进程时，就会关闭所有的守护进程。守护进程就是用户进程的“炮灰” 。<br>如何设置一个守护进程？</p>
-<pre><code>Thread daemon = new Thread(new Runnable(){
-    public void run()
-    {
-
-    }
-});
-damon.setDaemon(true) ; //设置setDaemon(true)就ok
-damon.start();
-</code></pre><h2 id="TreadLocal"><a href="#TreadLocal" class="headerlink" title="TreadLocal"></a>TreadLocal</h2><p>在此之前有对共有变量的操作，但是由于多线程的原因，使得我们对共享变量操作时可能被打断，共享变量被其他线程修改从而导致错误，所有当时我们使用加锁的方法，让共享变量只能由一个线程操作。</p>
-<p>但是使用锁会影响程序的性能，所以我们使用另外一种方法来使用共享变量————Threadlocal。注意，这里是使用，而不是修改！</p>
-<p>当对一个共享变量使用TreadLocal来定义时，线程在使用该变量时会拷贝该共享变量在自己的本地中，之后的操作都是对本地的共享变量的拷贝值进行操作，其他线程访问不到该拷贝的值，当然，这一操作也不会改变共享变量。</p>
-<p>TreadLocal主要有三种方法：</p>
-<blockquote>
-<ul>
-<li>set()    //用于设置本地变量</li>
-<li>get()    //用于获取本地变量</li>
-<li>remove()     //用于删除本地变量</li>
-</ul>
-</blockquote>
-<p>具体用法如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static ThreadLocal&lt;String&gt; local = new ThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                local.set(&quot;A is set&quot;);
-                System.out.println(&quot;A:&quot;+local.get());
-                local.remove(); 
-                System.out.println(&quot;A remove:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                local.set(&quot;B is set&quot;);
-                System.out.println(&quot;B:&quot;+local.get());
-                local.remove(); 
-                System.out.println(&quot;B remove:&quot;+local.get());
-            }
-        });
-        A.start();
-        B.start();
-    }
-
-}
-</code></pre><p>结果如下：</p>
-<pre><code>B:B is set
-B remove:null
-A:A is set
-A remove:null
-</code></pre><p>ThreadLocal 不支持继承！<br>也就是子进程不能调用父进程的ThreadLocal。<br>如果在上述程序修改如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static ThreadLocal&lt;String&gt; local = new ThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-        local.set(&quot;main set local&quot;);
-        System.out.println(&quot;main:&quot;+local.get());
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;A:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;B:&quot;+local.get());
-            }
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        A.start();
-        B.start();
-
-    }
-
-}
-</code></pre><p>最后的结果为：</p>
-<pre><code>main:main set local
-A:null
-B:null  
-</code></pre><p>如何子进程才可以继承父进程的ThreadLocal呢？<br>我们使用InheritableThreadLocal定义变量，修改程序如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static InheritableThreadLocal&lt;String&gt; local = new InheritableThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-        local.set(&quot;main set local&quot;);
-        System.out.println(&quot;main:&quot;+local.get());
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;A:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;B:&quot;+local.get());
-            }
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        A.start();
-        B.start();
-    }
-}
-</code></pre><p>结果如下：</p>
-<pre><code>main:main set local
-A:main set local
-B:main set local
-</code></pre><h2 id="Java-中共享变量的内存可见性问题"><a href="#Java-中共享变量的内存可见性问题" class="headerlink" title="Java 中共享变量的内存可见性问题"></a>Java 中共享变量的内存可见性问题</h2><p>正如上一部分ThreadLocal所示，线程在获取共享变量时总是保存共享变量的拷贝值，并对这个拷贝的共享变量进行修改，且这个共享变量是私有的，不可以被其他线程访问，而且不会影响到共享变量。那么问题来了，如果A线程修改了这个共享变量，但线程B在调用共享变量时仍然调用的是自己保存在自己的本地的变量，这就导致了错误，这就是内存可见性问题。</p>
-<p>如何解决这个问题呢？</p>
-<h3 id="使用synchronized"><a href="#使用synchronized" class="headerlink" title="使用synchronized"></a>使用synchronized</h3><p>直接加锁，不拷贝，直接修改共享变量。这样会比较占用资源。</p>
-<h3 id="使用volatile关键字"><a href="#使用volatile关键字" class="headerlink" title="使用volatile关键字"></a>使用volatile关键字</h3><p>当使用volatile关键字时，线程修改本地变量之后，将其直接刷新入共享变量中，而其他线程在访问共享变量时，不会访问本地的拷贝值，而是直接去访问共享变量。</p>
-<p>volatile这种方法并不是原子操作，即在读——写——改过程中是不安全的，他是允许多个线程同时访问同一共享变量的。<br>如果需要考虑原子操作时m，要使用synchronized方法。</p>
-<h2 id="Java中的CAS操作"><a href="#Java中的CAS操作" class="headerlink" title="Java中的CAS操作"></a>Java中的CAS操作</h2><blockquote>
-<ul>
-<li>boolean compareAndSwapLong(Object obj,long valueOffset,long expect,long update)</li>
-</ul>
-</blockquote>
-<p>解释为：对于一个共享Object中偏移量为valueOffset的变量，如果他的值为expect，则将其修改为update。<br>注意哦，compareAndSwapLong可是一个原子操作哦，使用非常安全。</p>
-<h2 id="Unsafe类"><a href="#Unsafe类" class="headerlink" title="Unsafe类"></a>Unsafe类</h2><p>当我们需要原子操作时，如果使用加锁会很麻烦，Unsafe提供了一系列硬件级原子操作：</p>
-<blockquote>
-<ul>
-<li>long objectFieldOffset(Field field)    //获取指定变量在所属类中的偏移地址</li>
-<li>int arrayBaseOffset(Class arrayClass)   //获取数组的第一个元素地址</li>
-<li>boolean compareAndSwapLong(Object obj,long valueOffset,long expect,long update)</li>
-</ul>
-</blockquote>
-<p>这个类貌似官方非常不建议用。所以暂且搁置。。。</p>
-<h2 id="Java指令重排序"><a href="#Java指令重排序" class="headerlink" title="Java指令重排序"></a>Java指令重排序</h2><p>Java在进行编译的时候会对独立的操作进行重排序，以提高机器的性能。但是在多线程时很容易就会出错。<br>对于共享变量我们使用volatile进行修饰就可以避免Java指令重排序所带来的错误。</p>
-<h2 id="伪共享"><a href="#伪共享" class="headerlink" title="伪共享"></a>伪共享</h2><p>当cpu寻找某一地址的数据时，会先在缓存区查找是否含有该数据，如果不含有该数据，再到内存中寻找该数据，如果其相邻的数据缓存中不存在，则把其相邻的内存块也载入到缓存区中。这一机制在单线程运行时可以加快程序运行速度。<br>但在多线程程序中，由于共享变量被改写，会使得线程的缓冲区对应的缓存行的数据被清除，导致同一缓存行的共享数据的丢失，造成了缓存区命中率大大降低，且要不断与内存交换数据，使得运行速度降低。<br>对于这种情况需要对缓存区的数据进行填充，使其每次清除的缓存行中只含有与其对应的共享数据。这样便提高了缓存区的效率，如下：</p>
-<pre><code>public static class Filling
-{
-    public volatile Long value = 0L ; 
-    public long p1,p2,p3,p4,p5,p6 ;
-}
-</code></pre><p>其中value为共享变量，而p1——p6为填充，这样在对应的缓存行中就只含有一个变量了。<br>ye也可以使用sun.misc.Contended注解，来解决伪共享问题，如下：</p>
-<pre><code>@sun.misc.Contended
-public final static class Filling
-{
-    public volatile long value = 0L ;
-}
-</code></pre><h2 id="锁的概念"><a href="#锁的概念" class="headerlink" title="锁的概念"></a>锁的概念</h2><h3 id="公平锁与非公平锁"><a href="#公平锁与非公平锁" class="headerlink" title="公平锁与非公平锁"></a>公平锁与非公平锁</h3><p>公平锁：ReentrantLock pairLock = new ReentrantLock(true) ；<br>公平锁在释放之后，将其送给（在锁住时）第一个请求使用的线程。</p>
-<p>非公平锁ReentrantLock pairLock = new ReentrantLock(false) ；<br>公平锁在释放之后，任何线程取得该锁的概率相等。</p>
-<h3 id="独占锁与共享锁"><a href="#独占锁与共享锁" class="headerlink" title="独占锁与共享锁"></a>独占锁与共享锁</h3><p>独占锁只可以由一个线程持有（如：ReentrantLock，只可以由一个线程持有），共享锁可以由多个线程持有（如：ReadWriteLock,可以由多个线程进行读操作）。</p>
-<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>程序如下：</p>
-<pre><code>public static class Hello
-{
-    public synchronized void helloA()
-    {
-        System.out.println(&quot;hello&quot;);
-    }
-    public synchronized void helloB()
-    {
-        System.out.println(&quot;helloB&quot;);
-        helloA() ;
-    }
-}
-</code></pre><p>图中helloB先获取了锁，之后又去调用helloA，如果不是重入锁会导致阻塞。而重入锁允许持有该锁的线程无限调用该锁，使用这里不会造成阻塞。</p>
-<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>使用这种锁时，当其他线程调用h共享变量时，如果有锁，则不会立即挂起，而是多次尝试获取。（可以设置该尝试次数）</p>
+        <h1 id="深入理解计算机系统：lab2"><a href="#深入理解计算机系统：lab2" class="headerlink" title="深入理解计算机系统：lab2"></a>深入理解计算机系统：lab2</h1><hr>
+<p>这个实验是有关于反向工程的小实验，可以从中学习到一些有关于破解的基础知识，以及对gdb的基本操作。<br><a id="more"></a></p>
+<p>先来看看gdb下需要学习的操作：</p>
+<pre><code>gdb + 目标文件      //开始对目标文件运行gdb
+break + 目标函数/目标地址   //设置断点
+run     //运行目标文件
+stepi       //向后运行一步
+finish          //运行结束当前的函数
+info register       //查看寄存器中的值
+x/s + 地址          //查看目标内存地址中的值，并以字符串形式输出
+x/d + 地址           //查看目标内存地址中的值，并以十进制输出
+q                   //退出gdb
+</code></pre><p>下面开始我们的拆弹之旅吧！</p>
+<h2 id="Part-0"><a href="#Part-0" class="headerlink" title="Part 0"></a>Part 0</h2><p>首先我们要先需要看看我们的炸弹中有哪些函数，好让我们可以设置断点。<br>使用指令：</p>
+<pre><code>objdump -t bomb | less 
+</code></pre><p>先来观察一波符号表。<br>输入bomb看看有那些信息<br>得到：</p>
+<pre><code>bomb.c
+initialize_bomb_solve
+explode_bomb
+bomb_id
+initialize_bomb
+</code></pre><p>显然explode_bomb是爆炸函数，一旦触发他咱们就凉凉。<br>接下来运行：</p>
+<pre><code>objdump -d bomb &gt; bomb.txt
+</code></pre><p>看看源代码的结构是啥，查找到了第一阶段的代码：</p>
+<pre><code>0000000000400ee0 &lt;phase_1&gt;:
+400ee0:    48 83 ec 08              sub    $0x8,%rsp
+    400ee4:    be 00 24 40 00           mov    $0x402400,%esi
+400ee9:    e8 4a 04 00 00           callq  401338 &lt;strings_not_equal&gt;
+400eee:    85 c0                    test   %eax,%eax
+400ef0:    74 05                    je     400ef7 &lt;phase_1+0x17&gt;
+400ef2:    e8 43 05 00 00           callq  40143a &lt;explode_bomb&gt;
+400ef7:    48 83 c4 08              add    $0x8,%rsp
+400efb:    c3                       retq   
+</code></pre><h2 id="Part-1"><a href="#Part-1" class="headerlink" title="Part 1"></a>Part 1</h2><p>我们现在得到了第一阶段的汇编代码了。<br>开始分析：<br>在地址400ee4:时，指令传入一个奇怪的地址$0x402400，之后调用了一个函数查看我们的输入与给定的字符串是否相等。<br>看一下$0x402400这个地址存的啥：<br><img src="http://tu.027cgb.com/618037/1.png" alt="1"><br>ok,看来这个就是答案了，重新运行并输入答案：<br><img src="http://tu.027cgb.com/618037/2.png" alt="2"></p>
+<h2 id="Part-2"><a href="#Part-2" class="headerlink" title="Part 2"></a>Part 2</h2><p>设置断点到phase_2处，使用disas查看此处代码：<br><img src="http://tu.027cgb.com/618037/3.png" alt="3"><br>下面开始分析代码：<br>看到有很多很多jmp之类的转移指令，不慌，我们慢慢来。<br>+9除调用的函数read_six_numbers暴露了他的信息————需要我们输入6个数字，+14处告诉我们输入的第一个数字要与1相比较，不相等就爆炸，所以第一个数字当然是1了，之后顺着他的步骤跳转到了+52处观察到</p>
+<pre><code>lea 0x4(%rsp),%rbx
+lea 0x18(%rsp),%rbp
+</code></pre><p>说明了%rbx存着我们第二个数字的地址，%rbp存着堆栈的栈顶地址。<br>之后跟着跳转到+27处</p>
+<pre><code>mov -0x4(%rbx),%eax
+mov %eax,%eax
+cmp %eax,(%rbx)
+je ......
+</code></pre><p>这一段在讲啥啊？<br>第一句说明eax存储着rbx中的数字的前一个数字，之后将他两倍了，然后将两倍之后的结果与rbx所指地址中的数字做比较，如果不相等就爆炸！</p>
+<p>看出了吗？这是让你输入一个首相为1公比为2的6个等比数字啊！<br>所以答案是：</p>
+<pre><code>1 2 4 8 16 32
+</code></pre><p>输入得到结果：<br><img src="http://tu.027cgb.com/618037/4.png" alt="4"><br>成功！</p>
+<h2 id="Part-3"><a href="#Part-3" class="headerlink" title="Part 3"></a>Part 3</h2><p>下面设置断点在phase_3<br>到达断点后进行反汇编得到：<br><img src="http://tu.027cgb.com/618037/5.png" alt="5"><br>好长啊！！！！</p>
+<p>别慌，慢慢分析一哈。</p>
+<p>+14处有关奇怪的数字$0x4025cf，查一下：<br><img src="http://tu.027cgb.com/618037/6.png" alt="6"><br>哈哈，看来是要输入两个数字啊。<br>接着往下看，+29告诉我们第一个数字要大于1<br>+39告诉我们第一个数字小于7，之后是啥？</p>
+<p>腚睛一看：原来是个switch语句啊。</p>
+<p>太长了，作为一个懒人，直接输入个数字瞧瞧会跳到哪个语句吧。</p>
+<p>我直接输入5.看看分支跳到哪里：<br><img src="http://tu.027cgb.com/618037/7.png" alt="7"><br>看来跳转到了+123处看看这个时候的寄存器的值：<br><img src="http://tu.027cgb.com/618037/8.png" alt="8"><br>所以为5的时候对应的第二个数字是206<br>输入我们的答案，通过！</p>
+<h2 id="Part-4"><a href="#Part-4" class="headerlink" title="Part 4"></a>Part 4</h2><p>到了第四阶段，先看一哈代码是个啥。<br><img src="http://tu.027cgb.com/618037/9.png" alt="9"><br>看到一个地址：$0x025cf，看一下存了啥<br><img src="http://tu.027cgb.com/618037/10.png" alt="10"><br>看来又需要我们输入两个数字了。。。<br>看到这里调用了一个函数（看到小箭头了吗）<br>先不要着急进入。。。<br>往下看看：<br>经过这个函数之后我们需要将%eax置为0，在往下看+69处告诉我们第二个参数是0<br>ok下面我们看看要向这个函数传递的参数：</p>
+<pre><code>第一个参数 ——&gt;%edi 
+14 ——&gt;%edx
+0 ——&gt;%esi
+</code></pre><p>ok，我们看看函数里有些啥：<br><img src="http://tu.027cgb.com/618037/11.png" alt="11"><br>看到了，+48处有调用了fun4，看来是个递归函数啊好复杂啊。<br>不慌，先来看看我们的目标应该怎么达成（eax置0），我们看到了+36处有我们想要的语句：</p>
+<pre><code>mov $0x0.%eax
+</code></pre><p>所以首先我们要想办法跳转到+36处，观察一下跳到+36处的条件是什么：</p>
+<pre><code>cmp %edi,%eax
+</code></pre><p>表明第一个参数要小于等于%ecx，由之前的计算可知%ecx是7，所以第一个参数需要小于等于7，再往下看，+41处要求第一个参数需要大于等于%ecx才可以跳转到结束的地方，此时ecx为7，取上下两个不等式的交集，故第一个参数是7。</p>
+<p>所以这道题目的答案是7，0。输入后的结果如下：<br><img src="http://tu.027cgb.com/618037/12.png" alt="11"><br>成功！</p>
+<h2 id="Part-5"><a href="#Part-5" class="headerlink" title="Part 5"></a>Part 5</h2><p>下面来看看第五题：</p>
+<pre><code>401062:        53                       push   %rbx
+401063:        48 83 ec 20              sub    $0x20,%rsp
+    401067:            48 89 fb                 mov    %rdi,%rbx
+    40106a:            64 48 8b 04 25 28 00     mov    %fs:0x28,%rax
+    401071:            00 00 
+    401073:            48 89 44 24 18           mov    %rax,0x18(%rsp)
+    401078:            31 c0                    xor    %eax,%eax
+    40107a:            e8 9c 02 00 00           callq  40131b &lt;string_length&gt;
+    40107f:            83 f8 06                 cmp    $0x6,%eax
+401082:        74 4e                    je     4010d2 &lt;phase_5+0x70&gt;
+401084:        e8 b1 03 00 00           callq  40143a &lt;explode_bomb&gt;
+401089:        eb 47                    jmp    4010d2 &lt;phase_5+0x70&gt;
+40108b:        0f b6 0c 03              movzbl (%rbx,%rax,1),%ecx
+40108f:        88 0c 24                 mov    %cl,(%rsp)
+401092:        48 8b 14 24              mov    (%rsp),%rdx
+401096:        83 e2 0f                 and    $0xf,%edx
+    401099:            0f b6 92 b0 24 40 00             movzbl 0x4024b0(%rdx),%edx
+    4010a0:            88 54 04 10                      mov    %dl,0x10(%rsp,%rax,1)
+    4010a4:            48 83 c0 01              add    $0x1,%rax
+4010a8:        48 83 f8 06              cmp    $0x6,%rax
+    4010ac:            75 dd                    jne    40108b &lt;phase_5+0x29&gt;
+    4010ae:            c6 44 24 16 00           movb   $0x0,0x16(%rsp)
+4010b3:        be 5e 24 40 00           mov    $0x40245e,%esi
+    4010b8:            48 8d 7c 24 10           lea    0x10(%rsp),%rdi
+    4010bd:            e8 76 02 00 00           callq  401338 &lt;strings_not_equal&gt;
+    4010c2:            85 c0                    test   %eax,%eax
+    4010c4:            74 13                    je     4010d9 &lt;phase_5+0x77&gt;
+    4010c6:            e8 6f 03 00 00           callq  40143a &lt;explode_bomb&gt;
+    4010cb:            0f 1f 44 00 00           nopl   0x0(%rax,%rax,1)
+    4010d0:            eb 07                    jmp    4010d9 &lt;phase_5+0x77&gt;
+    4010d2:            b8 00 00 00 00           mov    $0x0,%eax
+4010d7:        eb b2                    jmp    40108b &lt;phase_5+0x29&gt;
+4010d9:        48 8b 44 24 18           mov    0x18(%rsp),%rax
+4010de:        64 48 33 04 25 28 00     xor    %fs:0x28,%rax
+4010e5:        00 00 
+4010e7:        74 05                    je     4010ee &lt;phase_5+0x8c&gt;
+4010e9:        e8 42 fa ff ff           callq  400b30 &lt;__stack_chk_fail@plt&gt;
+4010ee:        48 83 c4 20              add    $0x20,%rsp
+4010f2:        5b                       pop    %rbx
+4010f3:        c3                       retq   
+</code></pre><p>这道题目看起来还是有点蒙圈的，40107a:告诉我们这次输入的是一个字符串，40107f告诉我们字符串的长度是6。4010b3处有个奇怪的地址$0x40245e，我们查看一下这个地址：<br><img src="http://tu.027cgb.com/618037/2019-03-22%2011-50-54%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="1"><br>所以我们的输入字符串最后与flyers作比较就ok，401099处也有一个奇怪的地址：0x4024b0<br>看一下有什么内容：<br><img src="http://tu.027cgb.com/618037/2019-03-22%2011-51-13%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="2"><br>往下看代码，我们明白了需要用0x4024b0处的前一段字符串拼凑出flyers。所以对应的位置是：<br>9 15 14 5 6 7<br>相对位置是对应于0的asc码的，所以字符串是9?&gt;567<br>输入答案，成功！</p>
+<h2 id="Part-6"><a href="#Part-6" class="headerlink" title="Part 6"></a>Part 6</h2><p>看代码！</p>
+<pre><code>00000000004010f4 &lt;phase_6&gt;:
+4010f4:    41 56                    push   %r14
+4010f6:    41 55                    push   %r13
+4010f8:    41 54                    push   %r12
+4010fa:    55                       push   %rbp
+4010fb:    53                       push   %rbx
+4010fc:    48 83 ec 50              sub    $0x50,%rsp
+    401100:    49 89 e5                 mov    %rsp,%r13
+    401103:    48 89 e6                 mov    %rsp,%rsi
+    401106:    e8 51 03 00 00           callq  40145c &lt;read_six_numbers&gt;
+    40110b:    49 89 e6                 mov    %rsp,%r14
+    40110e:    41 bc 00 00 00 00        mov    $0x0,%r12d
+401114:    4c 89 ed                 mov    %r13,%rbp
+401117:    41 8b 45 00              mov    0x0(%r13),%eax
+40111b:    83 e8 01                 sub    $0x1,%eax
+    40111e:    83 f8 05                 cmp    $0x5,%eax
+401121:    76 05                    jbe    401128 &lt;phase_6+0x34&gt;
+401123:    e8 12 03 00 00           callq  40143a &lt;explode_bomb&gt;
+401128:    41 83 c4 01              add    $0x1,%r12d
+    40112c:    41 83 fc 06              cmp    $0x6,%r12d
+401130:    74 21                    je     401153 &lt;phase_6+0x5f&gt;
+401132:    44 89 e3                 mov    %r12d,%ebx
+401135:    48 63 c3                 movslq %ebx,%rax
+401138:    8b 04 84                 mov    (%rsp,%rax,4),%eax
+40113b:    39 45 00                 cmp    %eax,0x0(%rbp)
+40113e:    75 05                    jne    401145 &lt;phase_6+0x51&gt;
+401140:    e8 f5 02 00 00           callq  40143a &lt;explode_bomb&gt;
+401145:    83 c3 01                 add    $0x1,%ebx
+    401148:    83 fb 05                 cmp    $0x5,%ebx
+40114b:    7e e8                    jle    401135 &lt;phase_6+0x41&gt;
+40114d:    49 83 c5 04              add    $0x4,%r13
+    401151:    eb c1                    jmp    401114 &lt;phase_6+0x20&gt;
+    401153:    48 8d 74 24 18           lea    0x18(%rsp),%rsi
+    401158:    4c 89 f0                 mov    %r14,%rax
+    40115b:    b9 07 00 00 00           mov    $0x7,%ecx
+401160:    89 ca                    mov    %ecx,%edx
+401162:    2b 10                    sub    (%rax),%edx
+401164:    89 10                    mov    %edx,(%rax)
+401166:    48 83 c0 04              add    $0x4,%rax
+    40116a:    48 39 f0                 cmp    %rsi,%rax
+    40116d:    75 f1                    jne    401160 &lt;phase_6+0x6c&gt;
+    40116f:    be 00 00 00 00           mov    $0x0,%esi
+401174:    eb 21                    jmp    401197 &lt;phase_6+0xa3&gt;
+401176:    48 8b 52 08              mov    0x8(%rdx),%rdx
+40117a:    83 c0 01                 add    $0x1,%eax
+    40117d:    39 c8                    cmp    %ecx,%eax
+    40117f:    75 f5                    jne    401176 &lt;phase_6+0x82&gt;
+    401181:    eb 05                    jmp    401188 &lt;phase_6+0x94&gt;
+    401183:    ba d0 32 60 00           mov    $0x6032d0,%edx
+401188:    48 89 54 74 20           mov    %rdx,0x20(%rsp,%rsi,2)
+40118d:    48 83 c6 04              add    $0x4,%rsi
+    401191:    48 83 fe 18              cmp    $0x18,%rsi
+401195:    74 14                    je     4011ab &lt;phase_6+0xb7&gt;
+401197:    8b 0c 34                 mov    (%rsp,%rsi,1),%ecx
+40119a:    83 f9 01                 cmp    $0x1,%ecx
+    40119d:    7e e4                    jle    401183 &lt;phase_6+0x8f&gt;
+    40119f:    b8 01 00 00 00           mov    $0x1,%eax
+4011a4:    ba d0 32 60 00           mov    $0x6032d0,%edx
+    4011a9:    eb cb                    jmp    401176 &lt;phase_6+0x82&gt;
+    4011ab:    48 8b 5c 24 20           mov    0x20(%rsp),%rbx
+    4011b0:    48 8d 44 24 28           lea    0x28(%rsp),%rax
+    4011b5:    48 8d 74 24 50           lea    0x50(%rsp),%rsi
+    4011ba:    48 89 d9                 mov    %rbx,%rcx
+    4011bd:    48 8b 10                 mov    (%rax),%rdx
+    4011c0:    48 89 51 08              mov    %rdx,0x8(%rcx)
+    4011c4:    48 83 c0 08              add    $0x8,%rax
+4011c8:    48 39 f0                 cmp    %rsi,%rax
+4011cb:    74 05                    je     4011d2 &lt;phase_6+0xde&gt;
+4011cd:    48 89 d1                 mov    %rdx,%rcx
+4011d0:    eb eb                    jmp    4011bd &lt;phase_6+0xc9&gt;
+4011d2:    48 c7 42 08 00 00 00     movq   $0x0,0x8(%rdx)
+    4011d9:    00 
+    4011da:    bd 05 00 00 00           mov    $0x5,%ebp
+4011df:    48 8b 43 08              mov    0x8(%rbx),%rax
+4011e3:    8b 00                    mov    (%rax),%eax
+4011e5:    39 03                    cmp    %eax,(%rbx)
+4011e7:    7d 05                    jge    4011ee &lt;phase_6+0xfa&gt;
+4011e9:    e8 4c 02 00 00           callq  40143a &lt;explode_bomb&gt;
+4011ee:    48 8b 5b 08              mov    0x8(%rbx),%rbx
+4011f2:    83 ed 01                 sub    $0x1,%ebp
+    4011f5:    75 e8                    jne    4011df &lt;phase_6+0xeb&gt;
+    4011f7:    48 83 c4 50              add    $0x50,%rsp
+4011fb:    5b                       pop    %rbx
+4011fc:    5d                       pop    %rbp
+4011fd:    41 5c                    pop    %r12
+4011ff:    41 5d                    pop    %r13
+401201:    41 5e                    pop    %r14
+401203:    c3                       retq   
+</code></pre><p>好长。。。<br>遇到这么长的代码，只好拆成一段一段来解决了:</p>
+<pre><code>401106:    e8 51 03 00 00           callq  40145c &lt;read_six_numbers&gt;
+40110b:    49 89 e6                 mov    %rsp,%r14
+40110e:    41 bc 00 00 00 00        mov    $0x0,%r12d
+    401114: 4c 89 ed                mov    %r13,%rbp
+    401117: 41 8b 45 00             mov    0x0(%r13),%eax
+    40111b: 83 e8 01                sub    $0x1,%eax
+40111e:    83 f8 05                 cmp    $0x5,%eax
+    401121: 76 05                   jbe    401128 &lt;phase_6+0x34&gt;
+    401123: e8 12 03 00 00          callq  40143a &lt;explode_bomb&gt;
+    401128: 41 83 c4 01             add    $0x1,%r12d
+40112c:    41 83 fc 06              cmp    $0x6,%r12d
+    401130: 74 21                   je     401153 &lt;phase_6+0x5f&gt;
+    401132: 44 89 e3                mov    %r12d,%ebx
+    401135: 48 63 c3                movslq %ebx,%rax
+    401138: 8b 04 84                mov    (%rsp,%rax,4),%eax
+    40113b: 39 45 00                cmp    %eax,0x0(%rbp)
+    40113e: 75 05                   jne    401145 &lt;phase_6+0x51&gt;
+    401140: e8 f5 02 00 00          callq  40143a &lt;explode_bomb&gt;
+    401145: 83 c3 01                add    $0x1,%ebx
+401148:    83 fb 05                 cmp    $0x5,%ebx
+    40114b: 7e e8                   jle    401135 &lt;phase_6+0x41&gt;
+    40114d: 49 83 c5 04             add    $0x4,%r13
+401151:    eb c1                    jmp    401114 &lt;phase_6+0x20&gt;
+</code></pre><p>这一段代码将我们输入的6个数字读入，要求这六个数字小于7且互不相同。</p>
+<pre><code>401153:    48 8d 74 24 18           lea    0x18(%rsp),%rsi
+401158:    4c 89 f0                 mov    %r14,%rax
+40115b:    b9 07 00 00 00           mov    $0x7,%ecx
+    401160: 89 ca                   mov    %ecx,%edx
+    401162: 2b 10                   sub    (%rax),%edx
+    401164: 89 10                   mov    %edx,(%rax)
+    401166: 48 83 c0 04             add    $0x4,%rax
+40116a:    48 39 f0                 cmp    %rsi,%rax
+40116d:    75 f1                    jne    401160 &lt;phase_6+0x6c&gt;
+</code></pre><p>这一段用7减去输入的数字，在存入原来的位置。</p>
+<pre><code>40116f:    be 00 00 00 00           mov    $0x0,%esi
+    401174: eb 21                   jmp    401197 &lt;phase_6+0xa3&gt;
+    401176: 48 8b 52 08             mov    0x8(%rdx),%rdx
+    40117a: 83 c0 01                add    $0x1,%eax
+40117d:    39 c8                    cmp    %ecx,%eax
+40117f:    75 f5                    jne    401176 &lt;phase_6+0x82&gt;
+401181:    eb 05                    jmp    401188 &lt;phase_6+0x94&gt;
+401183:    ba d0 32 60 00           mov    $0x6032d0,%edx
+    401188: 48 89 54 74 20          mov    %rdx,0x20(%rsp,%rsi,2)
+    40118d: 48 83 c6 04             add    $0x4,%rsi
+401191:    48 83 fe 18              cmp    $0x18,%rsi
+    401195: 74 14                   je     4011ab &lt;phase_6+0xb7&gt;
+    401197: 8b 0c 34                mov    (%rsp,%rsi,1),%ecx
+    40119a: 83 f9 01                cmp    $0x1,%ecx
+40119d:    7e e4                    jle    401183 &lt;phase_6+0x8f&gt;
+40119f:    b8 01 00 00 00           mov    $0x1,%eax
+    4011a4: ba d0 32 60 00          mov    $0x6032d0,%edx
+4011a9:    eb cb                    jmp    401176 &lt;phase_6+0x82&gt;
+</code></pre><p>查看一下$0x6032d0：<br><img src="http://tu.027cgb.com/618037/2019-03-22%2011-25-29%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="5"><br>node1到node6的值如下：<br><img src="http://tu.027cgb.com/618037/2019-03-22%2011-25-54%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="6"><br>下列代码检验是否从大到小排列：</p>
+<pre><code>4011d2: 48 c7 42 08 00 00 00    movq   $0x0,0x8(%rdx)
+    4011d9:    00 
+    4011da:    bd 05 00 00 00           mov    $0x5,%ebp
+4011df: 48 8b 43 08             mov    0x8(%rbx),%rax
+4011e3: 8b 00                   mov    (%rax),%eax
+4011e5: 39 03                   cmp    %eax,(%rbx)
+4011e7: 7d 05                   jge    4011ee &lt;phase_6+0xfa&gt;
+4011e9: e8 4c 02 00 00          callq  40143a &lt;explode_bomb&gt;
+4011ee: 48 8b 5b 08             mov    0x8(%rbx),%rbx
+4011f2: 83 ed 01                sub    $0x1,%ebp
+    4011f5:    75 e8                    jne    4011df &lt;phase_6+0xeb&gt;
+    4011f7:    48 83 c4 50              add    $0x50,%rsp
+4011fb: 5b                      pop    %rbx
+4011fc: 5d                      pop    %rbp
+4011fd: 41 5c                   pop    %r12
+4011ff: 41 5d                   pop    %r13
+401201: 41 5e                   pop    %r14
+401203: c3                      retq 
+</code></pre><p>所以我们输入的数字应该是：4 3 2 1 6 5<br>成功！</p>
 
       
 
@@ -488,7 +496,7 @@ public final static class Filling
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
         		</li>
       		
 		</ul>
@@ -544,7 +552,7 @@ public final static class Filling
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/20/并发编程之美/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/22/lab2/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -558,18 +566,9 @@ public final static class Filling
   
 <nav id="article-nav">
   
-    <a href="/2019/03/22/lab2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          深入理解计算机系统：lab2
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/16/lab3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">深入理解计算机系统:lab3</div>
+    <a href="/2019/03/20/并发编程之美/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">并发编程之美:基础部分</div>
       <i class="icon-circle-right"></i>
     </a>
   
