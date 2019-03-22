@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>并发编程之美:基础部分 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Java 并发编程之美：基础部分 开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+  <meta name="description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
 <meta name="keywords" content="Java并发编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并发编程之美:基础部分">
 <meta property="og:url" content="http://yoursite.com/2019/03/20/并发编程之美/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Java 并发编程之美：基础部分 开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta property="og:description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-20T06:02:26.372Z">
+<meta property="og:updated_time" content="2019-03-22T16:41:02.180Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="并发编程之美:基础部分">
-<meta name="twitter:description" content="Java 并发编程之美：基础部分 开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta name="twitter:description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -179,9 +179,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h1 id="Java-并发编程之美：基础部分"><a href="#Java-并发编程之美：基础部分" class="headerlink" title="Java 并发编程之美：基础部分"></a>Java 并发编程之美：基础部分</h1><hr>
-<p>开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。<br><a id="more"></a></p>
+        <p>开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。<br><a id="more"></a></p>
 <h2 id="如何创建多线程"><a href="#如何创建多线程" class="headerlink" title="如何创建多线程"></a>如何创建多线程</h2><p>Java多线程有三种方式创建————一个继承，三个实现。<br>1.新建的类继承Thread。在主函数中直接调用start运行<br>2.新建的类实现Runnable。在主函数中创建Thread将该类传入，作为线程运行的方法。<br>3.新建的类实现Callable。在主函数中创建FutureTask将该类传入，作为线程运行的方法。<br>具体创建方法如下：</p>
 <pre><code>public class createandrunning {
     public static void main(String args[])
