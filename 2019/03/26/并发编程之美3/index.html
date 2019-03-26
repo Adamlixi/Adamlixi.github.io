@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Java并发编程之美：高级篇（1） | Hexo</title>
+  <title>Java并发编程之美：高级篇（2） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本章分为三部分：   ThreadLocalRamdom Java原子类操作 Java并发包中List">
+  <meta name="description" content="在这一节中我们来深入分析锁的原理。">
 <meta name="keywords" content="Java并发编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java并发编程之美：高级篇（1）">
-<meta property="og:url" content="http://yoursite.com/2019/03/23/并发编程之美2/index.html">
+<meta property="og:title" content="Java并发编程之美：高级篇（2）">
+<meta property="og:url" content="http://yoursite.com/2019/03/26/并发编程之美3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="本章分为三部分：   ThreadLocalRamdom Java原子类操作 Java并发包中List">
+<meta property="og:description" content="在这一节中我们来深入分析锁的原理。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-22T16:40:33.374Z">
+<meta property="og:image" content="http://tu.027cgb.com/618037/1_131980671126127812.png">
+<meta property="og:updated_time" content="2019-03-26T09:52:30.134Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java并发编程之美：高级篇（1）">
-<meta name="twitter:description" content="本章分为三部分：   ThreadLocalRamdom Java原子类操作 Java并发包中List">
+<meta name="twitter:title" content="Java并发编程之美：高级篇（2）">
+<meta name="twitter:description" content="在这一节中我们来深入分析锁的原理。">
+<meta name="twitter:image" content="http://tu.027cgb.com/618037/1_131980671126127812.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -159,96 +161,148 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-并发编程之美2" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-并发编程之美3" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Java并发编程之美：高级篇（1）
+      Java并发编程之美：高级篇（2）
     </h1>
   
 
         
-        <a href="/2019/03/23/并发编程之美2/" class="archive-article-date">
-  	<time datetime="2019-03-22T16:34:01.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
+        <a href="/2019/03/26/并发编程之美3/" class="archive-article-date">
+  	<time datetime="2019-03-26T09:47:30.299Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本章分为三部分：</p>
-<blockquote>
-<ul>
-<li>ThreadLocalRamdom</li>
-<li>Java原子类操作</li>
-<li>Java并发包中List<a id="more"></a>
-</li>
-</ul>
-</blockquote>
-<h2 id="ThreadLocalRamdom"><a href="#ThreadLocalRamdom" class="headerlink" title="ThreadLocalRamdom"></a>ThreadLocalRamdom</h2><p>ThreadLocalRamdom：在并发操作时，解决随机变量的问题。</p>
-<h3 id="Random的局限性"><a href="#Random的局限性" class="headerlink" title="Random的局限性"></a>Random的局限性</h3><p>&ensp;&ensp;Java在生成随机数时首先产生一个字符串，称为“种子”，并根据“种子”产生随机数。之后的操作总是先将种子更新，然后再根据“种子”产生新的随机数，所以每次产生的随机数都是互不相同的。<br>&ensp;&ensp;但是在多线程编程时对Random的操作并不是原子操作，会导致多个线程使用的“种子”相同，从而导致多线程产生的随机数是相同的。</p>
-<h3 id="ThreadLocalRandom"><a href="#ThreadLocalRandom" class="headerlink" title="ThreadLocalRandom"></a>ThreadLocalRandom</h3><p>ThreadLocalRandom是如何解决这一问题的呢？<br>先来看看如何使用：</p>
-<pre><code>public class ThreadLocalRandomTest {
+        <p>在这一节中我们来深入分析锁的原理。</p>
+<a id="more"></a>
+<h2 id="LockSupport工具类"><a href="#LockSupport工具类" class="headerlink" title="LockSupport工具类"></a>LockSupport工具类</h2><p>作用：挂起和唤醒进程。</p>
+<h3 id="void-part"><a href="#void-part" class="headerlink" title="void part()"></a>void part()</h3><p>当调用该方法时，会检查当前线程是否已经获得LockSupport的许可证，如果已经获得许可证，则立即返回，如果没有，则将当前线程挂起。默认线程没有获得许可证。</p>
+<pre><code>public class LockSuppurtTest {
     public static void main(String args[])
     {
-        ThreadLocalRandom TLR = ThreadLocalRandom.current() ;
-        for(int i = 0 ; i &lt; 10 ; i ++)
-        {
-            System.out.println(TLR.nextInt(10));
-        }
+        System.out.println(&quot;begin park!&quot;);
+        LockSupport.park();
+        System.out.println(&quot;end park!&quot;);
     }
 }
-</code></pre><p>与Random不同，ThreadLocalRandom.current()可以获取当前线程的种子，然后各个线程都维护一个属于该线程的“种子”，所以各个线程的随机数产生互不相同。</p>
-<h2 id="Java原子类操作"><a href="#Java原子类操作" class="headerlink" title="Java原子类操作"></a>Java原子类操作</h2><p>在并发编程中，原子操作是非常重要的一种操作。但是在高并发编程时如果使用阻塞式的原子操作会十分影响程序的性能。<br>Java引入原子操作类使用CAS实现原子操作，极大的提高了程序的性能，具体有AtomicInteger，AtomicLong，AtomicBoolean等，这里着重介绍AtomicLong的操作，其他的差不多。</p>
-<h3 id="递增，递减操作"><a href="#递增，递减操作" class="headerlink" title="递增，递减操作"></a>递增，递减操作</h3><pre><code>AtomicLong al = new AtomicLong() ;
-        al.incrementAndGet() ;  //+1 返回+1后的值
-        al.decrementAndGet() ;  //-1 返回-1后的值
-        al.getAndIncrement() ;  //+1 返回原值
-        al.getAndDecrement() ;  //-1 返回原值
-</code></pre><h3 id="boolean-compareAndSet-long-expect，long-update"><a href="#boolean-compareAndSet-long-expect，long-update" class="headerlink" title="boolean compareAndSet(long expect，long update)"></a>boolean compareAndSet(long expect，long update)</h3><p>显然这个与Unsafe中的compareAndSet一模一样，不解释了。</p>
-<h2 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h2><p>前面的原子操作虽然CAS解决了原子操作的问题，但是在高并发的情况下仍然会造成很多线程自旋浪费CPU资源。LongAdder应运而生。<br>LongAdder的基本思想是将一个变量分解为多个，让多个线程竞争多个资源，从而提升CPU的效能。<br>在LongAdder中使用base与Cell来代表变量，在线程比较少的时候使用base，在线程较多时通过增加Cell数组长度从而增加变量个数。这里base与Cell就相当于AtomicLong。<br>这里要注意一点，由于Cell是使用的数组来实现，是一块连续的内存，所以需要对他进行字节填充，以避免伪共享的出现。</p>
+</code></pre><p>结果：</p>
+<pre><code>begin park!
+</code></pre><h3 id="void-park-Object-block"><a href="#void-park-Object-block" class="headerlink" title="void park(Object block)"></a>void park(Object block)</h3><p>一般传入参数为this，当查看线程时，挂起的线程会显示其所属线程。</p>
+<h3 id="void-unpart"><a href="#void-unpart" class="headerlink" title="void unpart()"></a>void unpart()</h3><p>调用该方法时，如果传入的thread没有许可证，则让传入线程获得许可证。</p>
+<pre><code>public class LockSuppurtTest {
+    public static void main(String args[])
+    {
+        System.out.println(&quot;begin park!&quot;);
+        LockSupport.unpark(Thread.currentThread());
+        LockSupport.park();
+        System.out.println(&quot;end park!&quot;);
+    }
+}
+</code></pre><p>结果：</p>
+<pre><code>begin park!
+end park!
+</code></pre><p>再看一个例子：</p>
+<pre><code>public class LockSuppurtTest {
+    public static void main(String args[]) throws InterruptedException
+    {
+        Thread thread = new Thread(new Runnable(){
+            public void run()
+            {
+                System.out.println(&quot;begin park!&quot;);
+                LockSupport.park();
+                System.out.println(&quot;end park!&quot;);
+            }
+        });
+        thread.start();
+        Thread.sleep(1000);
+        LockSupport.unpark(thread);
+
+
+    }
+}
+</code></pre><p>结果：</p>
+<pre><code>begin park!
+end park!
+</code></pre><p>注意，当线程调用interrupt方法时，也可以唤醒park。</p>
+<pre><code>public static void main(String args[]) throws InterruptedException
+{
+    Thread thread = new Thread(new Runnable(){
+        public void run()
+        {
+            while(!Thread.interrupted()){
+                System.out.println(&quot;begin park!&quot;);
+                LockSupport.park();
+                System.out.println(&quot;end park!&quot;);
+            }
+        }
+    });
+    thread.start();
+    Thread.sleep(1000);
+    thread.interrupt();
+
+}
+</code></pre><p>结果：</p>
+<pre><code>begin park!
+end park!
+</code></pre><h3 id="void-parkNanos-long-nanos"><a href="#void-parkNanos-long-nanos" class="headerlink" title="void parkNanos(long nanos)"></a>void parkNanos(long nanos)</h3><p>与park相同，当线程没有获得许可证时线程会挂起，不过他的挂起时间到了nanos ms时，会自动返回。</p>
+<pre><code>public class LockSuppurtTest {
+    public static void main(String args[]) throws InterruptedException
+    {
+        Thread thread = new Thread(new Runnable(){
+            public void run()
+            {
+                System.out.println(&quot;begin park!&quot;);
+                LockSupport.parkNanos(1000000000);
+                System.out.println(&quot;end park!&quot;);
+
+            }
+        });
+        thread.start();
+
+    }
+}
+</code></pre><p>结果：</p>
+<pre><code>begin park!
+end park!
+</code></pre><h3 id="void-parkUntil-Object-blocker-long-nanos"><a href="#void-parkUntil-Object-blocker-long-nanos" class="headerlink" title="void parkUntil(Object blocker , long nanos)"></a>void parkUntil(Object blocker , long nanos)</h3><p>挂起到一个时间点（从1970年到现在的毫秒）</p>
+<h2 id="抽象同步队列AQS概述"><a href="#抽象同步队列AQS概述" class="headerlink" title="抽象同步队列AQS概述"></a>抽象同步队列AQS概述</h2><p>AQS是锁的一种非常重要的结构。<br><img src="http://tu.027cgb.com/618037/1_131980671126127812.png" alt="1"><br>AQS是一个FIFO的双向队列，其节点通过tail和head确定。</p>
+<p>AQS中维护一个state，state是维护锁同步的重要因素，在独占锁中表示为资源是否被占有，在共享锁中表示可重入次数，可以使用getState()，setState()，compareAndSetState()对其进行修改。</p>
+<p>AQS队列中的节点是Node，Node节点是用来存放线程和线程状态的容器。<br>Node的内部含有：SHARE（线程获取共享资源时被阻塞），EXCLUSIVE（线程获取独占资源时被阻塞），waitStatsl记录当前线程的等待状态：CANCELLED（线程被取消），SIGNAL（线程需要被唤醒），CONDITION（线程在当前序列里等待），PROPAGATE（释放共享资源时需要通知其他节点），prev记录前驱结点，next记录后继节点。</p>
+<p>ConditionObject是AQS的内部类，可以访问AQS中的成员，同时也是一个单项队列，当条件变量发生阻塞时（后面会说），会挂到相应的ConditionObject队列中。</p>
+<p>AQS中主要解决3个大问题：</p>
 <blockquote>
 <ul>
-<li>long sum()<br>返回当前所有Cell中的值与base的和。</li>
-<li>void reset()<br>重置操作，将base清零，将Cell置为0。</li>
-<li>long sumThenReset()<br>返回当前所有Cell中的值与base的和，并清零重置。</li>
-<li>long sum(long x)<br>求和。</li>
+<li>独占方式获取资源与释放资源</li>
+<li>共享方式获取资源与释放资源</li>
+<li>条件变量的支持</li>
 </ul>
 </blockquote>
-<h2 id="Java并发包中List"><a href="#Java并发包中List" class="headerlink" title="Java并发包中List"></a>Java并发包中List</h2><p>并发包中的List只有CopyOnWriteArrayList。CopyOnWriteArrayList是一个线程安全的ArrayList。</p>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><blockquote>
-<ul>
-<li>CopyOnWriteArrayList()<br>无参数初始化</li>
-<li>CopyOnWriteArrayList(E[] toCopyIn)<br>传入数组进行初始化</li>
-<li>CopyOnWriteArrayList(Collection&lt;? extends E&gt; c)<br>传入集合进行初始化</li>
-</ul>
-</blockquote>
-<h3 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h3><blockquote>
-<ul>
-<li>add(E e)</li>
-<li>add(int index , E element)</li>
-</ul>
-</blockquote>
-<p>此类方法为阻塞式原子操作，通过抢占锁来对变量操作，要注意的是这种操作并不是在原链表上进行操作，而是直接将链表进行复制，并加入元素，最后链表指针指向的是新复制好的链表。</p>
-<h3 id="获取元素"><a href="#获取元素" class="headerlink" title="获取元素"></a>获取元素</h3><blockquote>
-<ul>
-<li>E get(int index)<br>要注意的是这个操作并没有上锁，所以会导致弱一致性的问题。</li>
-</ul>
-</blockquote>
-<h3 id="修改指定元素"><a href="#修改指定元素" class="headerlink" title="修改指定元素"></a>修改指定元素</h3><blockquote>
-<ul>
-<li>E set(int index , E element)<br>该操作上锁了</li>
-</ul>
-</blockquote>
-<h3 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h3><blockquote>
-<ul>
-<li>E remove(int index)<br>该操作上锁了</li>
-</ul>
-</blockquote>
-<h3 id="若一致性迭代器"><a href="#若一致性迭代器" class="headerlink" title="若一致性迭代器"></a>若一致性迭代器</h3><p>在list当然会有迭代器，为啥是若迭代器呢？因为调用时他并没有上锁。这会导致在迭代遍历list中的元素时，其他元素也可以访问list，这会导致一个问题，当在使用迭代器时其他函数来修改他咋办？<br>我们其他函数的修改操作都是复制list后并修改复制后的list，最后将指针指向新的list。所以当list在遍历元素时，如果其他函数来修改list，他的指针仍然指向原list，所以遍历的仍然是原来的函数，所以说他是若一致性的。</p>
+<h3 id="独占方式获取资源与释放资源"><a href="#独占方式获取资源与释放资源" class="headerlink" title="独占方式获取资源与释放资源"></a>独占方式获取资源与释放资源</h3><pre><code>void acquire(int arg)   //获取资源不对中断相应
+void acquireInterruptibly(int arg)  //获取资源对中断相应
+boolean release(int arg)    //释放资源
+</code></pre><p>当一个线程使用acquire获取独占锁时，acquire方法中会调用tryAcquire方法尝试获取资源（设置state的值），如果成功，则直接返回并获取资源。如果失败，则使用LockSupport.part(this)，并将类型设为Node.EXCLUSIVE将自己挂在AQS队列中。</p>
+<p>当一个线程调用release释放线程时，release方法会调用tryRelease释放资源（设置state的值），之后调用LockSupport.unpark(thread)将AQS队列被阻塞的进程激活，该进程使用tryAcquire尝试，查看state值是否满足需要，若满足，则激活，不满足还是被AQS队列挂起。</p>
+<p>注意tryAcquire方法与tryRelease方法AQS中并没有提供，需要在子类中定义。</p>
+<h3 id="共享方式获取资源与释放资源"><a href="#共享方式获取资源与释放资源" class="headerlink" title="共享方式获取资源与释放资源"></a>共享方式获取资源与释放资源</h3><pre><code>void acquireShared(int arg)   //获取资源不对中断相应
+void acquireSharedInterruptibly(int arg)  //获取资源对中断相应
+boolean releaseShared(int arg)    //释放资源
+</code></pre><p>当一个线程使用acquireShared获取共享锁时，acquireShared方法中会调用tryAcquireShared方法尝试获取资源（设置state的值），如果成功，则直接返回并获取资源。如果失败，则使用LockSupport.part(this)，并将类型设为Node.SHARED将自己挂在AQS队列中。</p>
+<p>当一个线程调用release释放线程时，release方法会调用tryRelease释放资源（设置state的值），之后调用LockSupport.unpark(thread)将AQS队列被阻塞的进程激活，该进程使用tryAcquire尝试，查看state值是否满足需要，若满足，则激活，不满足还是被AQS队列挂起。</p>
+<p>注意tryAcquire方法与tryRelease方法AQS中并没有提供，需要在子类中定义。</p>
+<h3 id="条件变量的支持"><a href="#条件变量的支持" class="headerlink" title="条件变量的支持"></a>条件变量的支持</h3><p>当我们需要解决生产者消费者模型时，需要为生产者提供一个锁，消费者提供一个锁，之后两个锁相互作用。<br>这样做非常麻烦，因为wait和notify方法只能对应一个锁（阻塞队列），有没有什么方法可以一个锁对应多个阻塞队列？<br>条件变量应运而生。</p>
+<p>条件变量是在AQS中创建一个ConditionObject内部类，当前进程如果不满足条件会被挂在对应的ConditionObject的条件队列中，同理，其他线程可以唤醒该进程，使得该进程转移至AQS队列中。</p>
+<p>AQS提供了await与signal方法对应wait和notify方法，来挂起或唤醒线程。</p>
+<p>下面我们来看一看AQS的具体应用：</p>
+<h3 id="独占锁ReentrantLock原理"><a href="#独占锁ReentrantLock原理" class="headerlink" title="独占锁ReentrantLock原理"></a>独占锁ReentrantLock原理</h3><p>ReentrantLock并没有使用条件变量支持，而是直接对AQS对列进行操作。当阻塞进程时将进程加入到AQS队列中，当释放进程时将state减一，并将锁的所有者置空。<br>注意在默认情况下使用非公平策略。</p>
+<h3 id="读写锁ReentrantReadWriteLock原理"><a href="#读写锁ReentrantReadWriteLock原理" class="headerlink" title="读写锁ReentrantReadWriteLock原理"></a>读写锁ReentrantReadWriteLock原理</h3><p>当我们使用ReentrantLock时，会遇到一种多读少写的情况，如果每次读都使用独占锁过于浪费，所以我们在读的时候应该使用多线程并发读，而写的时候采取独占锁的策略。<br>所以ReentrantLock使用到了ConditionObject类，他为读单独创建一个读条件变量，和一个写条件变量。<br>当调用写条件变量时，抢占独占锁，读和其他的写都不可以进行。<br>当调用读条件变量时，无需占锁，可以支持多线程进行。</p>
 
       
 
@@ -339,7 +393,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/23/并发编程之美2/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/26/并发编程之美3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -353,18 +407,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/03/26/并发编程之美3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Java并发编程之美：高级篇（2）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/22/lab2/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">深入理解计算机系统：lab2</div>
+    <a href="/2019/03/23/并发编程之美2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java并发编程之美：高级篇（1）</div>
       <i class="icon-circle-right"></i>
     </a>
   
