@@ -6,18 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019 | Hexo</title>
+  <title>Java并发编程之美：高级篇（3） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="北雷的村民">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2019/index.html">
+  <meta name="description" content="这一章节来学习并发队列的知识。">
+<meta name="keywords" content="Java并发编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程之美：高级篇（3）">
+<meta property="og:url" content="http://yoursite.com/2019/03/28/并发编程高级3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="北雷的村民">
+<meta property="og:description" content="这一章节来学习并发队列的知识。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://tu.027cgb.com/618037/22.png">
+<meta property="og:updated_time" content="2019-03-28T13:17:00.982Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="北雷的村民">
+<meta name="twitter:title" content="Java并发编程之美：高级篇（3）">
+<meta name="twitter:description" content="这一章节来学习并发队列的知识。">
+<meta name="twitter:image" content="http://tu.027cgb.com/618037/22.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -157,36 +161,84 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-并发编程高级3" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      Java并发编程之美：高级篇（3）
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/28/并发编程高级3/" class="archive-article-date">
+
+        
+        <a href="/2019/03/28/并发编程高级3/" class="archive-article-date">
   	<time datetime="2019-03-28T13:15:27.030Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/28/并发编程高级3/">Java并发编程之美：高级篇（3）</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>这一章节来学习并发队列的知识。<br><a id="more"></a></p>
+<h2 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h2><p>ConcurrentLinkedQueue使用CAS来实现线程安全。具体方法如下：</p>
+<pre><code>boolean offer()     //在队列末尾添加元素
+boolean add()       //在链表末尾添加元素
+E poll()            //队列头部移除一个元素
+E peek()            //获取队列头部一个元素（不移除）
+int size()          //计算当前队列元素个数
+boolean remove()    //若队列有相同元素则删除
+boolean contains()  //判断队列是否含有指定元素
+</code></pre><p>学习心得：<br>总的来说ConcurrentLinkedQueue队列的实现与单线程的队列的实现原理非常相似，但是需要注意的是这里多线程在处理队列问题时，如果线程没有获取到锁，会进行自旋操作，所以队列中，添加与删除都需要在循环语句中进行，如果CAS成功则返回，如果失败，则不停循环。<br>这一机制使得队列占用CPU的开销还是比较大的，因为这一特性，也使得插入和删除元素会存在多种情况，所以应该注意对多种情况的讨论。但是在其内部原理与数据结构上与单线程并没有特别大的不同。</p>
+<h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><p>与ConcurrentLinkedQueue不同，LinkedBlockingQueue使用独占锁的机制来解决并发的问题。<br>我认为LinkedBlockingQueue的设计更加巧妙，其结构如下：<br><img src="http://tu.027cgb.com/618037/22.png" alt="1"><br>LinkedBlockingQueue维护一个队列，并且与之关联了两个锁putlock与takelock，而这两个锁分别对应notFull与notEmpty条件队列。<br>为啥要使用两个条件变量呢？<br>putlock与之相关联的是插入操作，takelock与之相关联的是取出的操作，两者对共享队列的操作位置互不相同，且相互独立，所以这两种操作在大多数情况下是可以并行运行的。但也会有相互影响的情况：当putlock的线程全部挂起，或队列没有满时，需要使用takelock将notFull唤醒。<br>具体方法如下：</p>
+<pre><code>boolean offer()     //向队列中加入一个元素，如果满了返回false
+E poll()            //从头部获取一个元素出队
+boolean put()       //与offer相同
+E take()            //与poll相同，但对中断敏感
+E peek()            //从头部获取元素，但不删除
+int size()          //返回队列的大小
+</code></pre><h2 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h2><p>PriorityBlockingQueue是多并发程序下的优先队列，其内部结构使用二叉树堆实现，在PriorityBlockingQueue中有一个数组queue，用来存放队列元素，size用来存放队列中线程个数。<br>因为PriorityBlockingQueue是一个优先队列，所以也在其内部内置了Comparable比较器，当然我们也可以对元素进行重写比较器。<br>由于该队列是无界队列，所以这里只有一个notEmpty条件变量，不存在notFull条件变量，而且take方法使用阻塞模式，put方法则使用非阻塞模式。<br>具体方法如下：</p>
+<pre><code>boolean offer()     //向队列中加入一个元素
+E poll()            //将内部堆树中的根节点出队
+void put()          //与offer相同
+E take()            //与poll相同，但对中断敏感
+int size()          //返回队列的大小
+</code></pre><h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>DelayQueue并发队列是一个无界阻塞延迟队列。<br>什么是延迟队列？<br>当从队列获取元素时，只有过期元素才会出队，队列头部是最快要过期的元素。<br>具体方法如下：</p>
+<pre><code>void offer()        //插入元素
+void take()         //移出头节点的元素，如果时机已到则移除，时间未到则等待
+E poll()            //获取并删除头节点元素，没有过期元素则返回null
+int size()          //返回队列中元素个数，包含过期的与未过期的
+</code></pre>
+      
 
-        <div class="article-info info-on-right">
-          
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -198,247 +250,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/28/并发编程高级3/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/26/并发编程之美3/" class="archive-article-date">
-  	<time datetime="2019-03-26T09:47:30.299Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-26</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/26/并发编程之美3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java并发编程之美：高级篇（2）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/26/并发编程之美3/">Java并发编程之美：高级篇（2）</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/23/并发编程之美2/" class="archive-article-date">
-  	<time datetime="2019-03-22T16:34:01.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/23/并发编程之美2/">Java并发编程之美：高级篇（1）</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/22/lab2/" class="archive-article-date">
-  	<time datetime="2019-03-22T06:07:46.687Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/22/lab2/">深入理解计算机系统：lab2</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/20/并发编程之美/" class="archive-article-date">
-  	<time datetime="2019-03-20T05:50:42.431Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/20/并发编程之美/">并发编程之美:基础部分</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/16/lab3/" class="archive-article-date">
-  	<time datetime="2019-03-16T08:28:20.680Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/16/lab3/">深入理解计算机系统:lab3</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/16/csapp/" class="archive-article-date">
-  	<time datetime="2019-03-15T16:55:29.224Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/16/csapp/">深入理解计算机系统</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -461,8 +372,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
