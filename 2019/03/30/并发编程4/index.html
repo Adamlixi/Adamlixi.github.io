@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Hexo</title>
+  <title>Java并发编程之美（4） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="北雷的村民">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="这一节来学习线程池。">
+<meta name="keywords" content="并发编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程之美（4）">
+<meta property="og:url" content="http://yoursite.com/2019/03/30/并发编程4/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="北雷的村民">
+<meta property="og:description" content="这一节来学习线程池。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-30T09:54:53.067Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="北雷的村民">
+<meta name="twitter:title" content="Java并发编程之美（4）">
+<meta name="twitter:description" content="这一节来学习线程池。">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -157,16 +159,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-并发编程4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-并发编程4" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/30/并发编程4/">Java并发编程之美（4）</a>
+    <h1 class="article-title" itemprop="name">
+      Java并发编程之美（4）
     </h1>
   
 
@@ -179,12 +179,78 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这一节来学习线程池。<br>
-        
+        <p>这一节来学习线程池。<br><a id="more"></a><br>线程池主要解决两个问题：</p>
+<blockquote>
+<ul>
+<li>当执行需要大量线程时，需要创建，释放各种进程，而创建，释放线程会占用大量资源，而在线程池中的线程是可复用的。</li>
+<li>线程池提供了一种资源限制和管理的手段，可以限制限制线程数，动态新增线程。</li>
+</ul>
+</blockquote>
+<p>主要学习两种线程池：</p>
+<blockquote>
+<ul>
+<li>ThreadPoolExecutor</li>
+<li>ScheduledThreadPoolExecutor</li>
+</ul>
+</blockquote>
+<h2 id="1-ThreadPoolExecutor"><a href="#1-ThreadPoolExecutor" class="headerlink" title="1.ThreadPoolExecutor"></a>1.ThreadPoolExecutor</h2><p>成员变量ctl是一个Integern原子变量，记录线程状态和线程池中线程个数。其高三位为状态，其余位数表示线程个数。</p>
+<p>线程池参数如下：</p>
+<blockquote>
+<ul>
+<li>corePoolSize:线程池核心线程个数。</li>
+<li>workqueue:用于保存等待执行任务的阻塞队列，比如：ArrayBlockingQueue，LinkedBlockingQueue，SynchronousQueue，PriorityBlockingQueue。</li>
+<li>maximumPoolSize:线程池最大线程数量。</li>
+<li>ThreadFactory：创建线程的工厂。</li>
+<li>RejectedExecutionHandler：饱和策略，当队列到达maximumPoolSize后采取的策略。</li>
+<li>keeyAliveTime：存活时间。</li>
+<li>TimeUnit:存活的时间单位。</li>
+</ul>
+</blockquote>
+<p>线程池类型如下：</p>
+<blockquote>
+<ul>
+<li>newFixedThreadPool：创建一个核心线程个数和最大线程个数都是nThread的线程池，且阻塞队列长度Integer.MAX_VALUE。keeyAliveTime=0说明只要线程个数比核心线程个数多并且当前空闲则回收。</li>
+<li>newSingleThreadExecutor：创建一个核心线程个数和最大线程个数都为1的线程池，且阻塞队列长度Integer.MAX_VALUE。keeyAliveTime=0说明线程个数比核心线程个数多且当前空闲则回收。</li>
+<li>newCachedThreadPool:创建一个按需创建线程的线程池，初始线程个数为0，最多为Integer.MAX_VALUE，并且阻塞队列为同步队列。keeyAliveTime=60，说明当前线程在60s内空闲则回收。</li>
+</ul>
+</blockquote>
+<p>方法：</p>
+<h3 id="public-void-execute-Runnable-commend"><a href="#public-void-execute-Runnable-commend" class="headerlink" title="public void execute(Runnable commend)"></a>public void execute(Runnable commend)</h3><p>execute方法的作用是提交任务commend到线程池进行执行。</p>
+<h3 id="工作线程Worker的执行"><a href="#工作线程Worker的执行" class="headerlink" title="工作线程Worker的执行"></a>工作线程Worker的执行</h3><p>用户线程提交任务到线程池后，由Worker来执行。</p>
+<h3 id="shutdown操作"><a href="#shutdown操作" class="headerlink" title="shutdown操作"></a>shutdown操作</h3><p>调用shutdown方法后，线程池不会再接受新任务了，但是工作队列里的任务还是会执行。该方法会立即返回，并不等待队列任务完成再返回。</p>
+<h3 id="shutdownNow操作"><a href="#shutdownNow操作" class="headerlink" title="shutdownNow操作"></a>shutdownNow操作</h3><p>调用shutdownNow方法后，线程池不会再接受新任务了，并且丢弃工作队列里面的任务，正在执行的任务会被中断，该方法会立即返回，并不等待激活的任务执行完成，返回值为这时候队列里面被丢弃的任务列表。</p>
+<h3 id="awaitTermination操作"><a href="#awaitTermination操作" class="headerlink" title="awaitTermination操作"></a>awaitTermination操作</h3><p>当线程调用awaitTermination方法后，当前线程会被阻塞，直到线程池状态变为TERMINATED才返回，或者等待队列超时才返回。</p>
+<h2 id="2-ScheduledThreadPoolExecutor"><a href="#2-ScheduledThreadPoolExecutor" class="headerlink" title="2.ScheduledThreadPoolExecutor"></a>2.ScheduledThreadPoolExecutor</h2><p>这是一个可以在指定一定延迟时间后或者定时进行定时任务调度执行的线程池。<br>ScheduledThreadPoolExecutor继承了ThreadPoolExecutor并实现了ScheduleExecutorService接口。线程池队列是DelayWorkQueue，是一个延迟队列。</p>
+<p>主要他提供三种函数：</p>
+<h3 id="schedule-Runnable-command-long-delay-TimeUnit-unit"><a href="#schedule-Runnable-command-long-delay-TimeUnit-unit" class="headerlink" title="schedule(Runnable command,long delay,TimeUnit unit)"></a>schedule(Runnable command,long delay,TimeUnit unit)</h3><p>提交一个延迟执行的任务，任务从提交时间算起延迟单位为unit的delay时间后开始执行。提交任务不是周期性任务，任务只执行一次。</p>
+<h3 id="scheduleWithFixedDelay-Runnable-commend-long-initialDelay-long-delay-TimeUnit-unit"><a href="#scheduleWithFixedDelay-Runnable-commend-long-initialDelay-long-delay-TimeUnit-unit" class="headerlink" title="scheduleWithFixedDelay(Runnable commend,long initialDelay,long delay,TimeUnit unit)"></a>scheduleWithFixedDelay(Runnable commend,long initialDelay,long delay,TimeUnit unit)</h3><p>initialDelay表示提交任务后延迟多少时间l开始执行commend，unit是initialDelay和delay的时间单位，delay表示任务完成多少时间后再次调用该commend方法。任务会一直重复的运行下去，直到抛出异常，或者被取消了，或者关闭了线程池。</p>
+<h3 id="scheduleAtFixedRate-Runnable-commend-long-initialDelay-long-period-TimeUnit-unit"><a href="#scheduleAtFixedRate-Runnable-commend-long-initialDelay-long-period-TimeUnit-unit" class="headerlink" title="scheduleAtFixedRate(Runnable commend,long initialDelay,long period,TimeUnit unit)"></a>scheduleAtFixedRate(Runnable commend,long initialDelay,long period,TimeUnit unit)</h3><p>当把任务提交到线程池并延迟initialDelay之后开始运行commend，然后在initialDelay+period时间点再次运行，之后initialDelay+2*period以此类推。</p>
+
       
 
       
-    </p></div>
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
     <div class="article-info article-info-index">
       
       
@@ -202,16 +268,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/并发编程4/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/30/并发编程4/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/28/并发编程高级3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java并发编程之美：高级篇（3）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -231,536 +356,14 @@
 
 
 
-
   
-    <article id="post-并发编程高级3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/28/并发编程高级3/">Java并发编程之美：高级篇（3）</a>
-    </h1>
   
 
-        
-        <a href="/2019/03/28/并发编程高级3/" class="archive-article-date">
-  	<time datetime="2019-03-28T13:15:27.030Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>这一章节来学习并发队列的知识。<br>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/28/并发编程高级3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-并发编程之美3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/26/并发编程之美3/">Java并发编程之美：高级篇（2）</a>
-    </h1>
   
 
-        
-        <a href="/2019/03/26/并发编程之美3/" class="archive-article-date">
-  	<time datetime="2019-03-26T09:47:30.299Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在这一节中我们来深入分析锁的原理。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/26/并发编程之美3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-并发编程之美2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/23/并发编程之美2/">Java并发编程之美：高级篇（1）</a>
-    </h1>
   
 
-        
-        <a href="/2019/03/23/并发编程之美2/" class="archive-article-date">
-  	<time datetime="2019-03-22T16:34:01.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本章分为三部分：</p>
-<blockquote>
-<ul>
-<li>ThreadLocalRamdom</li>
-<li>Java原子类操作</li>
-<li>Java并发包中List
-        
-      
-
-      
-    </li></ul></blockquote></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/23/并发编程之美2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-lab2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/lab2/">深入理解计算机系统：lab2</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/22/lab2/" class="archive-article-date">
-  	<time datetime="2019-03-22T06:07:46.687Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这个实验是有关于反向工程的小实验，可以从中学习到一些有关于破解的基础知识，以及对gdb的基本操作。<br>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/22/lab2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-并发编程之美" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/20/并发编程之美/">并发编程之美:基础部分</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/20/并发编程之美/" class="archive-article-date">
-  	<time datetime="2019-03-20T05:50:42.431Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。<br>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/20/并发编程之美/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-lab3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/16/lab3/">深入理解计算机系统:lab3</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/16/lab3/" class="archive-article-date">
-  	<time datetime="2019-03-16T08:28:20.680Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在这一实验中我们会通过两种方法来完成对目标文件的攻击：</p>
-<blockquote>
-<ul>
-<li>缓冲区溢出攻击：1-3小题</li>
-<li>ROP 攻击：4，5小题
-        
-      
-
-      
-    </li></ul></blockquote></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/16/lab3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-csapp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/16/csapp/">深入理解计算机系统</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/16/csapp/" class="archive-article-date">
-  	<time datetime="2019-03-15T16:55:29.224Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一直想要拜读这部CS:APP,现在终于抽出了一段时间来好好阅读，在这里主要记录CS:APP中的实验，以便日后复习。<br>实验的链接在这里：<a href="http://csapp.cs.cmu.edu/3e/labs.html" target="_blank" rel="noopener">cs:app</a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cs:app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/16/csapp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -783,8 +386,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
