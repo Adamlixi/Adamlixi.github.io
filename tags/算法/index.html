@@ -6,20 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>并发编程之美:基础部分 | Hexo</title>
+  <title>Tag: 算法 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
-<meta name="keywords" content="Java并发编程">
-<meta property="og:type" content="article">
-<meta property="og:title" content="并发编程之美:基础部分">
-<meta property="og:url" content="http://yoursite.com/2019/03/20/并发编程之美/index.html">
+  <meta name="description" content="北雷的村民">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/tags/算法/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta property="og:description" content="北雷的村民">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-22T16:41:02.180Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="并发编程之美:基础部分">
-<meta name="twitter:description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="北雷的村民">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -159,448 +157,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-并发编程之美" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      并发编程之美:基础部分
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/03/30/算法1/" class="archive-article-date">
+  	<time datetime="2019-03-30T13:55:27.524Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/03/30/算法1/">排列组合问题</a>
     </h1>
   
 
-        
-        <a href="/2019/03/20/并发编程之美/" class="archive-article-date">
-  	<time datetime="2019-03-20T05:50:42.431Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。<br><a id="more"></a></p>
-<h2 id="如何创建多线程"><a href="#如何创建多线程" class="headerlink" title="如何创建多线程"></a>如何创建多线程</h2><p>Java多线程有三种方式创建————一个继承，三个实现。<br>1.新建的类继承Thread。在主函数中直接调用start运行<br>2.新建的类实现Runnable。在主函数中创建Thread将该类传入，作为线程运行的方法。<br>3.新建的类实现Callable。在主函数中创建FutureTask将该类传入，作为线程运行的方法。<br>具体创建方法如下：</p>
-<pre><code>public class createandrunning {
-    public static void main(String args[])
-    {
-        Thread method1 = new Method1() ;
-        method1.run();
-
-
-        Runnable method2 = new Method2() ;
-        new Thread(method2).start();
-
-
-        FutureTask&lt;String&gt; method3 = new FutureTask&lt;&gt;(new Method3()) ;
-        new Thread(method3).start();
-        try
-        {
-            String s = method3.get() ;
-            System.out.println(s);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    public static class Method1 extends Thread
-    {
-        public void run()
-        {
-            System.out.println(&quot;method1 was success!&quot;);
-        }
-    }
-    public static class Method2 implements Runnable
-    {
-        public void run()
-        {
-            System.out.println(&quot;method2 was success!&quot;) ;
-        }
-    }
-    public static class Method3 implements Callable&lt;String&gt;
-    {
-        public String call()
-        {
-            return &quot;method3 was success!&quot; ;
-        }
-    }
-}
-</code></pre><h2 id="同步与死锁"><a href="#同步与死锁" class="headerlink" title="同步与死锁"></a>同步与死锁</h2><p>同步：在多线程对共享资源进行操作时，很有可能对共享资源操作到一半，被另外一个线程抢占过去，从而导致错误的发生，所以在使用共享资源时往往需要同步，使得共享资源只可以被一个线程占有，操作，直到该线程操作结束释放资源才可以被其他线程竞争。<br>一般使用synchronized 来同步：</p>
-<pre><code>synchronized(共享变量)
-{
-    //操作
-}
-</code></pre><p>死锁：当多个进程互相抢占多个资源而造成的互相等待的结果。<br>死锁发生的条件如下：<br>1.互斥条件：资源同时只由一个线程占用。<br>2.请求并持有条件：一个线程已经持有一个条件，又在申请另一个条件。<br>3.不可剥夺条件：线程获取到的资源不能被其他线程抢占。<br>4.环路条件：存在一个线程——资源链。{T1,T2,…Tn} T1等待T2占用的资源，T2等待T3占用的资源…Tn等待T1占用的资源。</p>
-<h2 id="线程的等待与通知"><a href="#线程的等待与通知" class="headerlink" title="线程的等待与通知"></a>线程的等待与通知</h2><p>线程的等待有三种：</p>
-<blockquote>
-<ul>
-<li>wait()</li>
-<li>sleep()</li>
-<li>join()</li>
-</ul>
-</blockquote>
-<p>这三个函数都有“等待”的意思。</p>
-<p>wait() 函数调用时，调用该函数被挂起，同时释放资源，注意，如果该线程持有多个资源，只释放当前的资源，其他的资源不会被释放。注意在调用资源的wait()方法时，该线程n必须要持有该资源。<br>例如：</p>
-<pre><code>synchronized(A)
-{
-        //操作
-        synchronized(B)
-        {
-            B.wait() ;
-        }
-}
-</code></pre><p>此时释放B资源，A资源不会释放。</p>
-<p>sleep(int time) 函数调用时，对应的线程暂停time ms，但是并不会释放资源。</p>
-<p>join()函数多用在主函数中来等待其对应的线程结束，才会继续进行之后的程序。</p>
-<pre><code>public static void main(String args[])
-{
-    ......
-    threadA.start();
-    threadB.start();
-    threadA.join();
-    threadB.join();
-}
-</code></pre><p>主函数必须等待threadA和threadB线程运行结束后才会继续进行。</p>
-<p>关于线程的通知：</p>
-<blockquote>
-<ul>
-<li>notify()</li>
-<li>notifyAll()</li>
-</ul>
-</blockquote>
-<p>notify()<br>随机唤醒该资源对应的被挂起的线程。</p>
-<p>notifyAll()<br>唤醒该资源对应的所有被挂起的线程。</p>
-<h2 id="线程中断"><a href="#线程中断" class="headerlink" title="线程中断"></a>线程中断</h2><blockquote>
-<ul>
-<li>void interrupt() </li>
-<li>boolean isInterrupted() </li>
-<li>boolean interrupted() </li>
-</ul>
-</blockquote>
-<p>void interrupt()<br>中断线程，当A运行时，线程B调用A的interrupt方法，将A的中断标志置为true。<br>boolean isInterrupted()<br>测试该线程中断标志。并返回中断标志的状态。<br>boolean interrupted()<br>测试该线程中断标志。并返回中断标志的状态。如果发现线程被中断，则会清除中断状态。<br>注意：如果当一个线程处于sleep状态时，调用interrupted将其中断，<br>会出现InterruptedException异常。</p>
-<h2 id="守护线程与用户线程"><a href="#守护线程与用户线程" class="headerlink" title="守护线程与用户线程"></a>守护线程与用户线程</h2><p>父进程结束，子进程会结束吗？<br>答：不会。<br>父进程和子进程是独立的两个进程，一个进程的结束不会影响到另一个进程。</p>
-<p>用户进程结束，守护进程会结束吗？<br>答：会。<br>当JVM中没有用户进程时，就会关闭所有的守护进程。守护进程就是用户进程的“炮灰” 。<br>如何设置一个守护进程？</p>
-<pre><code>Thread daemon = new Thread(new Runnable(){
-    public void run()
-    {
-
-    }
-});
-damon.setDaemon(true) ; //设置setDaemon(true)就ok
-damon.start();
-</code></pre><h2 id="TreadLocal"><a href="#TreadLocal" class="headerlink" title="TreadLocal"></a>TreadLocal</h2><p>在此之前有对共有变量的操作，但是由于多线程的原因，使得我们对共享变量操作时可能被打断，共享变量被其他线程修改从而导致错误，所有当时我们使用加锁的方法，让共享变量只能由一个线程操作。</p>
-<p>但是使用锁会影响程序的性能，所以我们使用另外一种方法来使用共享变量————Threadlocal。注意，这里是使用，而不是修改！</p>
-<p>当对一个共享变量使用TreadLocal来定义时，线程在使用该变量时会拷贝该共享变量在自己的本地中，之后的操作都是对本地的共享变量的拷贝值进行操作，其他线程访问不到该拷贝的值，当然，这一操作也不会改变共享变量。</p>
-<p>TreadLocal主要有三种方法：</p>
-<blockquote>
-<ul>
-<li>set()    //用于设置本地变量</li>
-<li>get()    //用于获取本地变量</li>
-<li>remove()     //用于删除本地变量</li>
-</ul>
-</blockquote>
-<p>具体用法如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static ThreadLocal&lt;String&gt; local = new ThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                local.set(&quot;A is set&quot;);
-                System.out.println(&quot;A:&quot;+local.get());
-                local.remove(); 
-                System.out.println(&quot;A remove:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                local.set(&quot;B is set&quot;);
-                System.out.println(&quot;B:&quot;+local.get());
-                local.remove(); 
-                System.out.println(&quot;B remove:&quot;+local.get());
-            }
-        });
-        A.start();
-        B.start();
-    }
-
-}
-</code></pre><p>结果如下：</p>
-<pre><code>B:B is set
-B remove:null
-A:A is set
-A remove:null
-</code></pre><p>ThreadLocal 不支持继承！<br>也就是子进程不能调用父进程的ThreadLocal。<br>如果在上述程序修改如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static ThreadLocal&lt;String&gt; local = new ThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-        local.set(&quot;main set local&quot;);
-        System.out.println(&quot;main:&quot;+local.get());
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;A:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;B:&quot;+local.get());
-            }
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        A.start();
-        B.start();
-
-    }
-
-}
-</code></pre><p>最后的结果为：</p>
-<pre><code>main:main set local
-A:null
-B:null  
-</code></pre><p>如何子进程才可以继承父进程的ThreadLocal呢？<br>我们使用InheritableThreadLocal定义变量，修改程序如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static InheritableThreadLocal&lt;String&gt; local = new InheritableThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-        local.set(&quot;main set local&quot;);
-        System.out.println(&quot;main:&quot;+local.get());
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;A:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;B:&quot;+local.get());
-            }
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        A.start();
-        B.start();
-    }
-}
-</code></pre><p>结果如下：</p>
-<pre><code>main:main set local
-A:main set local
-B:main set local
-</code></pre><h2 id="Java-中共享变量的内存可见性问题"><a href="#Java-中共享变量的内存可见性问题" class="headerlink" title="Java 中共享变量的内存可见性问题"></a>Java 中共享变量的内存可见性问题</h2><p>正如上一部分ThreadLocal所示，线程在获取共享变量时总是保存共享变量的拷贝值，并对这个拷贝的共享变量进行修改，且这个共享变量是私有的，不可以被其他线程访问，而且不会影响到共享变量。那么问题来了，如果A线程修改了这个共享变量，但线程B在调用共享变量时仍然调用的是自己保存在自己的本地的变量，这就导致了错误，这就是内存可见性问题。</p>
-<p>如何解决这个问题呢？</p>
-<h3 id="使用synchronized"><a href="#使用synchronized" class="headerlink" title="使用synchronized"></a>使用synchronized</h3><p>直接加锁，不拷贝，直接修改共享变量。这样会比较占用资源。</p>
-<h3 id="使用volatile关键字"><a href="#使用volatile关键字" class="headerlink" title="使用volatile关键字"></a>使用volatile关键字</h3><p>当使用volatile关键字时，线程修改本地变量之后，将其直接刷新入共享变量中，而其他线程在访问共享变量时，不会访问本地的拷贝值，而是直接去访问共享变量。</p>
-<p>volatile这种方法并不是原子操作，即在读——写——改过程中是不安全的，他是允许多个线程同时访问同一共享变量的。<br>如果需要考虑原子操作时m，要使用synchronized方法。</p>
-<h2 id="Java中的CAS操作"><a href="#Java中的CAS操作" class="headerlink" title="Java中的CAS操作"></a>Java中的CAS操作</h2><blockquote>
-<ul>
-<li>boolean compareAndSwapLong(Object obj,long valueOffset,long expect,long update)</li>
-</ul>
-</blockquote>
-<p>解释为：对于一个共享Object中偏移量为valueOffset的变量，如果他的值为expect，则将其修改为update。<br>注意哦，compareAndSwapLong可是一个原子操作哦，使用非常安全。</p>
-<h2 id="Unsafe类"><a href="#Unsafe类" class="headerlink" title="Unsafe类"></a>Unsafe类</h2><p>当我们需要原子操作时，如果使用加锁会很麻烦，Unsafe提供了一系列硬件级原子操作：</p>
-<blockquote>
-<ul>
-<li>long objectFieldOffset(Field field)    //获取指定变量在所属类中的偏移地址</li>
-<li>int arrayBaseOffset(Class arrayClass)   //获取数组的第一个元素地址</li>
-<li>boolean compareAndSwapLong(Object obj,long valueOffset,long expect,long update)</li>
-</ul>
-</blockquote>
-<p>这个类貌似官方非常不建议用。所以暂且搁置。。。</p>
-<h2 id="Java指令重排序"><a href="#Java指令重排序" class="headerlink" title="Java指令重排序"></a>Java指令重排序</h2><p>Java在进行编译的时候会对独立的操作进行重排序，以提高机器的性能。但是在多线程时很容易就会出错。<br>对于共享变量我们使用volatile进行修饰就可以避免Java指令重排序所带来的错误。</p>
-<h2 id="伪共享"><a href="#伪共享" class="headerlink" title="伪共享"></a>伪共享</h2><p>当cpu寻找某一地址的数据时，会先在缓存区查找是否含有该数据，如果不含有该数据，再到内存中寻找该数据，如果其相邻的数据缓存中不存在，则把其相邻的内存块也载入到缓存区中。这一机制在单线程运行时可以加快程序运行速度。<br>但在多线程程序中，由于共享变量被改写，会使得线程的缓冲区对应的缓存行的数据被清除，导致同一缓存行的共享数据的丢失，造成了缓存区命中率大大降低，且要不断与内存交换数据，使得运行速度降低。<br>对于这种情况需要对缓存区的数据进行填充，使其每次清除的缓存行中只含有与其对应的共享数据。这样便提高了缓存区的效率，如下：</p>
-<pre><code>public static class Filling
-{
-    public volatile Long value = 0L ; 
-    public long p1,p2,p3,p4,p5,p6 ;
-}
-</code></pre><p>其中value为共享变量，而p1——p6为填充，这样在对应的缓存行中就只含有一个变量了。<br>ye也可以使用sun.misc.Contended注解，来解决伪共享问题，如下：</p>
-<pre><code>@sun.misc.Contended
-public final static class Filling
-{
-    public volatile long value = 0L ;
-}
-</code></pre><h2 id="锁的概念"><a href="#锁的概念" class="headerlink" title="锁的概念"></a>锁的概念</h2><h3 id="公平锁与非公平锁"><a href="#公平锁与非公平锁" class="headerlink" title="公平锁与非公平锁"></a>公平锁与非公平锁</h3><p>公平锁：ReentrantLock pairLock = new ReentrantLock(true) ；<br>公平锁在释放之后，将其送给（在锁住时）第一个请求使用的线程。</p>
-<p>非公平锁ReentrantLock pairLock = new ReentrantLock(false) ；<br>公平锁在释放之后，任何线程取得该锁的概率相等。</p>
-<h3 id="独占锁与共享锁"><a href="#独占锁与共享锁" class="headerlink" title="独占锁与共享锁"></a>独占锁与共享锁</h3><p>独占锁只可以由一个线程持有（如：ReentrantLock，只可以由一个线程持有），共享锁可以由多个线程持有（如：ReadWriteLock,可以由多个线程进行读操作）。</p>
-<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>程序如下：</p>
-<pre><code>public static class Hello
-{
-    public synchronized void helloA()
-    {
-        System.out.println(&quot;hello&quot;);
-    }
-    public synchronized void helloB()
-    {
-        System.out.println(&quot;helloB&quot;);
-        helloA() ;
-    }
-}
-</code></pre><p>图中helloB先获取了锁，之后又去调用helloA，如果不是重入锁会导致阻塞。而重入锁允许持有该锁的线程无限调用该锁，使用这里不会造成阻塞。</p>
-<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>使用这种锁时，当其他线程调用h共享变量时，如果有锁，则不会立即挂起，而是多次尝试获取。（可以设置该尝试次数）</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/20/并发编程之美/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/03/22/lab2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          深入理解计算机系统：lab2
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/03/16/lab3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">深入理解计算机系统:lab3</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -623,9 +233,9 @@ public final static class Filling
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

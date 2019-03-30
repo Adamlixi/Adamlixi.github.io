@@ -6,20 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>并发编程之美:基础部分 | Hexo</title>
+  <title>排列组合问题 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
-<meta name="keywords" content="Java并发编程">
+  <meta name="description" content="在刷题的过程中常常会遇到排列组合的问题，这里给出解决方案。">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="并发编程之美:基础部分">
-<meta property="og:url" content="http://yoursite.com/2019/03/20/并发编程之美/index.html">
+<meta property="og:title" content="排列组合问题">
+<meta property="og:url" content="http://yoursite.com/2019/03/30/算法1/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta property="og:description" content="在刷题的过程中常常会遇到排列组合的问题，这里给出解决方案。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-22T16:41:02.180Z">
+<meta property="og:image" content="http://tu1.027cgb.com/618037/2323.png">
+<meta property="og:image" content="http://tu1.027cgb.com/618037/123.png">
+<meta property="og:updated_time" content="2019-03-30T13:57:07.389Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="并发编程之美:基础部分">
-<meta name="twitter:description" content="开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。">
+<meta name="twitter:title" content="排列组合问题">
+<meta name="twitter:description" content="在刷题的过程中常常会遇到排列组合的问题，这里给出解决方案。">
+<meta name="twitter:image" content="http://tu1.027cgb.com/618037/2323.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -159,300 +162,152 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-并发编程之美" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-算法1" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      并发编程之美:基础部分
+      排列组合问题
     </h1>
   
 
         
-        <a href="/2019/03/20/并发编程之美/" class="archive-article-date">
-  	<time datetime="2019-03-20T05:50:42.431Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
+        <a href="/2019/03/30/算法1/" class="archive-article-date">
+  	<time datetime="2019-03-30T13:55:27.524Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>开始学习Java并发编程部分，在图书馆看到一本————《并发编程之美》，感觉写的还可以，所以做一些阅读笔记。<br><a id="more"></a></p>
-<h2 id="如何创建多线程"><a href="#如何创建多线程" class="headerlink" title="如何创建多线程"></a>如何创建多线程</h2><p>Java多线程有三种方式创建————一个继承，三个实现。<br>1.新建的类继承Thread。在主函数中直接调用start运行<br>2.新建的类实现Runnable。在主函数中创建Thread将该类传入，作为线程运行的方法。<br>3.新建的类实现Callable。在主函数中创建FutureTask将该类传入，作为线程运行的方法。<br>具体创建方法如下：</p>
-<pre><code>public class createandrunning {
-    public static void main(String args[])
+        <p>在刷题的过程中常常会遇到排列组合的问题，这里给出解决方案。<br><a id="more"></a></p>
+<h2 id="排列问题"><a href="#排列问题" class="headerlink" title="排列问题"></a>排列问题</h2><p>来看这道题：<br>Given a collection of distinct integers, return all possible permutations.</p>
+<pre><code>Example:
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+</code></pre><p>给定一个数组，要求我们输出他的全排列。<br>当面对一个排列问题，我们可以把它想成一个树，并使用DFS进行遍历。二叉树如下：<br><img src="http://tu1.027cgb.com/618037/2323.png" alt="1"><br>我们需要对每个节点进行所有节点的遍历，注意，每遍历一个点，需要将其恢复后再继续遍历下一个节点。具体代码如下：</p>
+<pre><code>class Solution {
+    static int[] nnums ;
+    public List&lt;List&lt;Integer&gt;&gt; permute(int[] nums) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;() ;
+        DFS(new ArrayList&lt;&gt;(),result,0,nums.length,nums) ;
+        return result ;
+    }
+    public static void DFS(List&lt;Integer&gt; list,List&lt;List&lt;Integer&gt;&gt; result,int n ,int size,int[] nums)
     {
-        Thread method1 = new Method1() ;
-        method1.run();
-
-
-        Runnable method2 = new Method2() ;
-        new Thread(method2).start();
-
-
-        FutureTask&lt;String&gt; method3 = new FutureTask&lt;&gt;(new Method3()) ;
-        new Thread(method3).start();
-        try
+        if(n &gt;= size)
         {
-            String s = method3.get() ;
-            System.out.println(s);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            result.add(new ArrayList&lt;&gt;(list)) ;
+            return ;
         }
-    }
-    public static class Method1 extends Thread
-    {
-        public void run()
+        for(int i = n ; i &lt; size ; i ++)
         {
-            System.out.println(&quot;method1 was success!&quot;);
+            swap(n,i,nums) ;
+            list.add(nums[n]) ;
+            DFS(list,result,n+1,size,nums) ;
+            list.remove(list.size() - 1) ;
+            swap(n,i,nums) ;
         }
     }
-    public static class Method2 implements Runnable
+    public static void swap(int i , int j , int[] nums)
     {
-        public void run()
+        int t = nums[i] ;
+        nums[i] = nums[j] ;
+        nums[j] = t ;
+    }
+}
+</code></pre><h2 id="组合问题"><a href="#组合问题" class="headerlink" title="组合问题"></a>组合问题</h2><pre><code>Given a set of distinct integers, S, return all possible subsets.
+Note:
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+
+For example,
+If S = [1,2,3], a solution is:
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+</code></pre><p>这是一道组合的问题，同样的我们可以将它看成是一个二叉树，每个节点元素都有两个选择，加入元素或者不加入元素。我们假设左节点是加入当前元素，右节点为不加入该节点，如图所示：<br><img src="http://tu1.027cgb.com/618037/123.png" alt="2"><br>注意题目要求每个集合中的元素从小到大输出，所以要先对数组进行排序。<br>代码如下：</p>
+<pre><code>class Solution {
+    public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+        Arrays.sort(nums) ;
+        List&lt;Integer&gt; list = new ArrayList&lt;&gt;() ;
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;() ;
+        DFS(0,list,result,nums) ;
+        return result ;
+    }
+    public static void DFS(int pos , List&lt;Integer&gt; list , List&lt;List&lt;Integer&gt;&gt; result , int[] nums)
+    {
+        result.add(new ArrayList&lt;&gt;(list)) ;
+        for(int i = pos ; i &lt; nums.length ; i ++)
         {
-            System.out.println(&quot;method2 was success!&quot;) ;
+            if(i &gt; pos &amp;&amp; nums[i] == nums[pos]) continue ;
+            list.add(nums[i]) ;
+            DFS(i+1,list,result,nums) ;
+            list.remove(list.size()-1) ;
         }
     }
-    public static class Method3 implements Callable&lt;String&gt;
+}
+</code></pre><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>组合问题与排列问题解决方法非常像，都可以看作是一个树的遍历，遍历的不同点是：排列必须要将每个节点都加入，而组合则是对每个节点进行选或不选的选择。</p>
+<p>再来看一道解决方案十分相似的题目：</p>
+<pre><code>Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+The same repeated number may be chosen from candidates unlimited number of times.
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+Example 1:
+Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+  [7],
+  [2,2,3]
+]
+Example 2:
+Input: candidates = [2,3,5], target = 8,
+A solution set is:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+</code></pre><p>这道题目可以对一个元素进行多选，仍然采取与上面题目相似的做法：</p>
+<pre><code>class Solution {
+    public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] candidates, int target) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;() ;
+        DFS(candidates,target,0,result,new ArrayList&lt;&gt;()) ;
+        return result ;
+    }
+    public static void DFS(int[] candidates, int target, int pos ,List&lt;List&lt;Integer&gt;&gt; result ,List&lt;Integer&gt; list)
     {
-        public String call()
+        if(target &lt; 0)
+            return ;
+        if(target == 0)
+            result.add(new ArrayList&lt;&gt;(list)) ;
+        for(int i = pos ; i &lt; candidates.length ; i ++)
         {
-            return &quot;method3 was success!&quot; ;
+            list.add(candidates[i]) ;
+            DFS(candidates,target-candidates[i],i,result,list) ;
+            list.remove(list.size()-1) ;
         }
     }
 }
-</code></pre><h2 id="同步与死锁"><a href="#同步与死锁" class="headerlink" title="同步与死锁"></a>同步与死锁</h2><p>同步：在多线程对共享资源进行操作时，很有可能对共享资源操作到一半，被另外一个线程抢占过去，从而导致错误的发生，所以在使用共享资源时往往需要同步，使得共享资源只可以被一个线程占有，操作，直到该线程操作结束释放资源才可以被其他线程竞争。<br>一般使用synchronized 来同步：</p>
-<pre><code>synchronized(共享变量)
-{
-    //操作
-}
-</code></pre><p>死锁：当多个进程互相抢占多个资源而造成的互相等待的结果。<br>死锁发生的条件如下：<br>1.互斥条件：资源同时只由一个线程占用。<br>2.请求并持有条件：一个线程已经持有一个条件，又在申请另一个条件。<br>3.不可剥夺条件：线程获取到的资源不能被其他线程抢占。<br>4.环路条件：存在一个线程——资源链。{T1,T2,…Tn} T1等待T2占用的资源，T2等待T3占用的资源…Tn等待T1占用的资源。</p>
-<h2 id="线程的等待与通知"><a href="#线程的等待与通知" class="headerlink" title="线程的等待与通知"></a>线程的等待与通知</h2><p>线程的等待有三种：</p>
-<blockquote>
-<ul>
-<li>wait()</li>
-<li>sleep()</li>
-<li>join()</li>
-</ul>
-</blockquote>
-<p>这三个函数都有“等待”的意思。</p>
-<p>wait() 函数调用时，调用该函数被挂起，同时释放资源，注意，如果该线程持有多个资源，只释放当前的资源，其他的资源不会被释放。注意在调用资源的wait()方法时，该线程n必须要持有该资源。<br>例如：</p>
-<pre><code>synchronized(A)
-{
-        //操作
-        synchronized(B)
-        {
-            B.wait() ;
-        }
-}
-</code></pre><p>此时释放B资源，A资源不会释放。</p>
-<p>sleep(int time) 函数调用时，对应的线程暂停time ms，但是并不会释放资源。</p>
-<p>join()函数多用在主函数中来等待其对应的线程结束，才会继续进行之后的程序。</p>
-<pre><code>public static void main(String args[])
-{
-    ......
-    threadA.start();
-    threadB.start();
-    threadA.join();
-    threadB.join();
-}
-</code></pre><p>主函数必须等待threadA和threadB线程运行结束后才会继续进行。</p>
-<p>关于线程的通知：</p>
-<blockquote>
-<ul>
-<li>notify()</li>
-<li>notifyAll()</li>
-</ul>
-</blockquote>
-<p>notify()<br>随机唤醒该资源对应的被挂起的线程。</p>
-<p>notifyAll()<br>唤醒该资源对应的所有被挂起的线程。</p>
-<h2 id="线程中断"><a href="#线程中断" class="headerlink" title="线程中断"></a>线程中断</h2><blockquote>
-<ul>
-<li>void interrupt() </li>
-<li>boolean isInterrupted() </li>
-<li>boolean interrupted() </li>
-</ul>
-</blockquote>
-<p>void interrupt()<br>中断线程，当A运行时，线程B调用A的interrupt方法，将A的中断标志置为true。<br>boolean isInterrupted()<br>测试该线程中断标志。并返回中断标志的状态。<br>boolean interrupted()<br>测试该线程中断标志。并返回中断标志的状态。如果发现线程被中断，则会清除中断状态。<br>注意：如果当一个线程处于sleep状态时，调用interrupted将其中断，<br>会出现InterruptedException异常。</p>
-<h2 id="守护线程与用户线程"><a href="#守护线程与用户线程" class="headerlink" title="守护线程与用户线程"></a>守护线程与用户线程</h2><p>父进程结束，子进程会结束吗？<br>答：不会。<br>父进程和子进程是独立的两个进程，一个进程的结束不会影响到另一个进程。</p>
-<p>用户进程结束，守护进程会结束吗？<br>答：会。<br>当JVM中没有用户进程时，就会关闭所有的守护进程。守护进程就是用户进程的“炮灰” 。<br>如何设置一个守护进程？</p>
-<pre><code>Thread daemon = new Thread(new Runnable(){
-    public void run()
-    {
-
-    }
-});
-damon.setDaemon(true) ; //设置setDaemon(true)就ok
-damon.start();
-</code></pre><h2 id="TreadLocal"><a href="#TreadLocal" class="headerlink" title="TreadLocal"></a>TreadLocal</h2><p>在此之前有对共有变量的操作，但是由于多线程的原因，使得我们对共享变量操作时可能被打断，共享变量被其他线程修改从而导致错误，所有当时我们使用加锁的方法，让共享变量只能由一个线程操作。</p>
-<p>但是使用锁会影响程序的性能，所以我们使用另外一种方法来使用共享变量————Threadlocal。注意，这里是使用，而不是修改！</p>
-<p>当对一个共享变量使用TreadLocal来定义时，线程在使用该变量时会拷贝该共享变量在自己的本地中，之后的操作都是对本地的共享变量的拷贝值进行操作，其他线程访问不到该拷贝的值，当然，这一操作也不会改变共享变量。</p>
-<p>TreadLocal主要有三种方法：</p>
-<blockquote>
-<ul>
-<li>set()    //用于设置本地变量</li>
-<li>get()    //用于获取本地变量</li>
-<li>remove()     //用于删除本地变量</li>
-</ul>
-</blockquote>
-<p>具体用法如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static ThreadLocal&lt;String&gt; local = new ThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                local.set(&quot;A is set&quot;);
-                System.out.println(&quot;A:&quot;+local.get());
-                local.remove(); 
-                System.out.println(&quot;A remove:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                local.set(&quot;B is set&quot;);
-                System.out.println(&quot;B:&quot;+local.get());
-                local.remove(); 
-                System.out.println(&quot;B remove:&quot;+local.get());
-            }
-        });
-        A.start();
-        B.start();
-    }
-
-}
-</code></pre><p>结果如下：</p>
-<pre><code>B:B is set
-B remove:null
-A:A is set
-A remove:null
-</code></pre><p>ThreadLocal 不支持继承！<br>也就是子进程不能调用父进程的ThreadLocal。<br>如果在上述程序修改如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static ThreadLocal&lt;String&gt; local = new ThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-        local.set(&quot;main set local&quot;);
-        System.out.println(&quot;main:&quot;+local.get());
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;A:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;B:&quot;+local.get());
-            }
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        A.start();
-        B.start();
-
-    }
-
-}
-</code></pre><p>最后的结果为：</p>
-<pre><code>main:main set local
-A:null
-B:null  
-</code></pre><p>如何子进程才可以继承父进程的ThreadLocal呢？<br>我们使用InheritableThreadLocal定义变量，修改程序如下：</p>
-<pre><code>public class ThreadLocalTest {
-    static InheritableThreadLocal&lt;String&gt; local = new InheritableThreadLocal&lt;&gt;() ;
-    public static void main(String args[])
-    {
-        local.set(&quot;main set local&quot;);
-        System.out.println(&quot;main:&quot;+local.get());
-        Thread A = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;A:&quot;+local.get());
-            }
-        });
-        Thread B = new Thread(new Runnable(){
-            public void run()
-            {
-                System.out.println(&quot;B:&quot;+local.get());
-            }
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        A.start();
-        B.start();
-    }
-}
-</code></pre><p>结果如下：</p>
-<pre><code>main:main set local
-A:main set local
-B:main set local
-</code></pre><h2 id="Java-中共享变量的内存可见性问题"><a href="#Java-中共享变量的内存可见性问题" class="headerlink" title="Java 中共享变量的内存可见性问题"></a>Java 中共享变量的内存可见性问题</h2><p>正如上一部分ThreadLocal所示，线程在获取共享变量时总是保存共享变量的拷贝值，并对这个拷贝的共享变量进行修改，且这个共享变量是私有的，不可以被其他线程访问，而且不会影响到共享变量。那么问题来了，如果A线程修改了这个共享变量，但线程B在调用共享变量时仍然调用的是自己保存在自己的本地的变量，这就导致了错误，这就是内存可见性问题。</p>
-<p>如何解决这个问题呢？</p>
-<h3 id="使用synchronized"><a href="#使用synchronized" class="headerlink" title="使用synchronized"></a>使用synchronized</h3><p>直接加锁，不拷贝，直接修改共享变量。这样会比较占用资源。</p>
-<h3 id="使用volatile关键字"><a href="#使用volatile关键字" class="headerlink" title="使用volatile关键字"></a>使用volatile关键字</h3><p>当使用volatile关键字时，线程修改本地变量之后，将其直接刷新入共享变量中，而其他线程在访问共享变量时，不会访问本地的拷贝值，而是直接去访问共享变量。</p>
-<p>volatile这种方法并不是原子操作，即在读——写——改过程中是不安全的，他是允许多个线程同时访问同一共享变量的。<br>如果需要考虑原子操作时m，要使用synchronized方法。</p>
-<h2 id="Java中的CAS操作"><a href="#Java中的CAS操作" class="headerlink" title="Java中的CAS操作"></a>Java中的CAS操作</h2><blockquote>
-<ul>
-<li>boolean compareAndSwapLong(Object obj,long valueOffset,long expect,long update)</li>
-</ul>
-</blockquote>
-<p>解释为：对于一个共享Object中偏移量为valueOffset的变量，如果他的值为expect，则将其修改为update。<br>注意哦，compareAndSwapLong可是一个原子操作哦，使用非常安全。</p>
-<h2 id="Unsafe类"><a href="#Unsafe类" class="headerlink" title="Unsafe类"></a>Unsafe类</h2><p>当我们需要原子操作时，如果使用加锁会很麻烦，Unsafe提供了一系列硬件级原子操作：</p>
-<blockquote>
-<ul>
-<li>long objectFieldOffset(Field field)    //获取指定变量在所属类中的偏移地址</li>
-<li>int arrayBaseOffset(Class arrayClass)   //获取数组的第一个元素地址</li>
-<li>boolean compareAndSwapLong(Object obj,long valueOffset,long expect,long update)</li>
-</ul>
-</blockquote>
-<p>这个类貌似官方非常不建议用。所以暂且搁置。。。</p>
-<h2 id="Java指令重排序"><a href="#Java指令重排序" class="headerlink" title="Java指令重排序"></a>Java指令重排序</h2><p>Java在进行编译的时候会对独立的操作进行重排序，以提高机器的性能。但是在多线程时很容易就会出错。<br>对于共享变量我们使用volatile进行修饰就可以避免Java指令重排序所带来的错误。</p>
-<h2 id="伪共享"><a href="#伪共享" class="headerlink" title="伪共享"></a>伪共享</h2><p>当cpu寻找某一地址的数据时，会先在缓存区查找是否含有该数据，如果不含有该数据，再到内存中寻找该数据，如果其相邻的数据缓存中不存在，则把其相邻的内存块也载入到缓存区中。这一机制在单线程运行时可以加快程序运行速度。<br>但在多线程程序中，由于共享变量被改写，会使得线程的缓冲区对应的缓存行的数据被清除，导致同一缓存行的共享数据的丢失，造成了缓存区命中率大大降低，且要不断与内存交换数据，使得运行速度降低。<br>对于这种情况需要对缓存区的数据进行填充，使其每次清除的缓存行中只含有与其对应的共享数据。这样便提高了缓存区的效率，如下：</p>
-<pre><code>public static class Filling
-{
-    public volatile Long value = 0L ; 
-    public long p1,p2,p3,p4,p5,p6 ;
-}
-</code></pre><p>其中value为共享变量，而p1——p6为填充，这样在对应的缓存行中就只含有一个变量了。<br>ye也可以使用sun.misc.Contended注解，来解决伪共享问题，如下：</p>
-<pre><code>@sun.misc.Contended
-public final static class Filling
-{
-    public volatile long value = 0L ;
-}
-</code></pre><h2 id="锁的概念"><a href="#锁的概念" class="headerlink" title="锁的概念"></a>锁的概念</h2><h3 id="公平锁与非公平锁"><a href="#公平锁与非公平锁" class="headerlink" title="公平锁与非公平锁"></a>公平锁与非公平锁</h3><p>公平锁：ReentrantLock pairLock = new ReentrantLock(true) ；<br>公平锁在释放之后，将其送给（在锁住时）第一个请求使用的线程。</p>
-<p>非公平锁ReentrantLock pairLock = new ReentrantLock(false) ；<br>公平锁在释放之后，任何线程取得该锁的概率相等。</p>
-<h3 id="独占锁与共享锁"><a href="#独占锁与共享锁" class="headerlink" title="独占锁与共享锁"></a>独占锁与共享锁</h3><p>独占锁只可以由一个线程持有（如：ReentrantLock，只可以由一个线程持有），共享锁可以由多个线程持有（如：ReadWriteLock,可以由多个线程进行读操作）。</p>
-<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>程序如下：</p>
-<pre><code>public static class Hello
-{
-    public synchronized void helloA()
-    {
-        System.out.println(&quot;hello&quot;);
-    }
-    public synchronized void helloB()
-    {
-        System.out.println(&quot;helloB&quot;);
-        helloA() ;
-    }
-}
-</code></pre><p>图中helloB先获取了锁，之后又去调用helloA，如果不是重入锁会导致阻塞。而重入锁允许持有该锁的线程无限调用该锁，使用这里不会造成阻塞。</p>
-<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>使用这种锁时，当其他线程调用h共享变量时，如果有锁，则不会立即挂起，而是多次尝试获取。（可以设置该尝试次数）</p>
-
+</code></pre>
       
 
       
@@ -486,7 +341,7 @@ public final static class Filling
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Java并发编程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
       		
 		</ul>
@@ -542,7 +397,7 @@ public final static class Filling
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/20/并发编程之美/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/30/算法1/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -556,18 +411,9 @@ public final static class Filling
   
 <nav id="article-nav">
   
-    <a href="/2019/03/22/lab2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          深入理解计算机系统：lab2
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/16/lab3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">深入理解计算机系统:lab3</div>
+    <a href="/2019/03/30/并发编程4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java并发编程之美（4）</div>
       <i class="icon-circle-right"></i>
     </a>
   
